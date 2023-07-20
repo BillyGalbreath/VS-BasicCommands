@@ -24,6 +24,10 @@ namespace BasicCommands {
             API = api;
 
             Config = api.LoadModConfig<Config>("BasicCommands.json");
+            if (Config == null) {
+                Config = new Config();
+                api.StoreModConfig(Config, "BasicCommands.json");
+            }
 
             api.Event.GameWorldSave += OnGameWorldSave;
 
