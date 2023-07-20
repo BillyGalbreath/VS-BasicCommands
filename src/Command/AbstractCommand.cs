@@ -1,4 +1,5 @@
 ﻿using BasicCommands.Configuration;
+using BasicCommands.Player;
 using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
@@ -8,7 +9,13 @@ namespace BasicCommands.Command {
                 .Create(cmd.name)
                 .WithDescription(Lang.Get($"{cmd.name}-description"))
                 .RequiresPrivilege($"basiccommands.{cmd.name}")
-                .HandleWith(Execute);
+                .HandleWith(args => {
+                    BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
+                    if (player == null) {
+                        return TextCommandResult.Error(Lang.Get("player-only-command"), "0x0001");
+                    }
+                    return Execute(player, args);
+                });
             if (cmd.aliases != null && cmd.aliases.Length > 0) {
                 chatCmd.WithAlias(cmd.aliases);
             }
@@ -17,6 +24,6 @@ namespace BasicCommands.Command {
             }
         }
 
-        public abstract TextCommandResult Execute(TextCommandCallingArgs args);
+        public abstract TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args);
     }
 }

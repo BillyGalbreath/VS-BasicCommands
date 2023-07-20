@@ -8,12 +8,7 @@ namespace BasicCommands.Command {
     public class CmdHomes : AbstractCommand {
         public CmdHomes(Config.Command cmd) : base(cmd) { }
 
-        public override TextCommandResult Execute(TextCommandCallingArgs args) {
-            BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
-            if (player == null) {
-                return TextCommandResult.Error(Lang.Get("player-only-command", "0x0001"));
-            }
-
+        public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             IEnumerable<string> homes = player.ListHomes();
             if (homes == null || !homes.Any()) {
                 return TextCommandResult.Success(Lang.Get("no-homes-set"));
