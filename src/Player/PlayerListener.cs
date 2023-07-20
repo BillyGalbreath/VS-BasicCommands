@@ -1,10 +1,10 @@
 ﻿using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
-namespace Essentials.Player {
+namespace BasicCommands.Player {
     internal class PlayerListener {
         internal PlayerListener() {
-            EssentialsMod mod = EssentialsMod.Instance();
+            BasicCommandsMod mod = BasicCommandsMod.Instance();
 
             mod.API.Event.PlayerCreate += OnPlayerCreate;
             mod.API.Event.PlayerJoin += OnPlayerJoin;
@@ -20,18 +20,18 @@ namespace Essentials.Player {
         }
 
         private void OnPlayerCreate(IServerPlayer player) {
-            EssPlayer.Get(player);
+            BasicPlayer.Get(player);
         }
 
         private void OnPlayerJoin(IServerPlayer player) {
-            EssPlayer.Get(player);
+            BasicPlayer.Get(player);
         }
 
         private void OnPlayerDisconnect(IServerPlayer player) {
         }
 
         private void OnPlayerDeath(IServerPlayer player, DamageSource damageSource) {
-            EssPlayer.Get(player).UpdateLastPosition();
+            BasicPlayer.Get(player).UpdateLastPosition();
         }
     }
 }

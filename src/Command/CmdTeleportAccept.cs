@@ -1,6 +1,6 @@
 ﻿using Vintagestory.API.Common;
 
-namespace Essentials.Command {
+namespace BasicCommands.Command {
     internal class CmdTeleportAccept : AbstractCommand {
         internal CmdTeleportAccept() : base("teleportaccept", "Accepts teleport requests", new[] { "tpaccept", "tpyes" }) {
         }

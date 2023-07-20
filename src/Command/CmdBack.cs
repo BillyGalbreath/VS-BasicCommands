@@ -1,12 +1,12 @@
-﻿using Essentials.Player;
+﻿using BasicCommands.Player;
 using Vintagestory.API.Common;
 
-namespace Essentials.Command {
+namespace BasicCommands.Command {
     internal class CmdBack : AbstractCommand {
         internal CmdBack() : base("back", "Teleports you to your previous location", new[] { "return" }) { }
 
         internal override TextCommandResult Execute(TextCommandCallingArgs args) {
-            EssPlayer player = EssPlayer.Get(args.Caller.Player);
+            BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
             if (player == null) {
                 return TextCommandResult.Error("Player only command.");
             }

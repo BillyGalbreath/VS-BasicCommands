@@ -1,12 +1,12 @@
-﻿using Essentials.Player;
+﻿using BasicCommands.Player;
 using Vintagestory.API.Common;
 
-namespace Essentials.Command {
+namespace BasicCommands.Command {
     internal class CmdDelHome : AbstractCommand {
         internal CmdDelHome() : base("delhome", "Removes a home", new[] { "remhome", "rmhome", "removehome", "deletehome" }, new WordArgParser("name", true)) { }
 
         internal override TextCommandResult Execute(TextCommandCallingArgs args) {
-            EssPlayer player = EssPlayer.Get(args.Caller.Player);
+            BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
             if (player == null) {
                 return TextCommandResult.Error("Player only command.");
             }
@@ -16,7 +16,7 @@ namespace Essentials.Command {
             }
 
             string name = args[0].ToString().Trim().ToLower();
-            if (!CmdHome.VALID_NAME.IsMatch(name)) {
+            if (!CmdHome.ValidName().IsMatch(name)) {
                 return TextCommandResult.Success("Invalid home name.");
             }
 

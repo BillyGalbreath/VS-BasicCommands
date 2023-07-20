@@ -1,20 +1,20 @@
-﻿using Essentials.Player;
+﻿using BasicCommands.Player;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
 
-namespace Essentials.Command {
+namespace BasicCommands.Command {
     internal class CmdHomes : AbstractCommand {
         internal CmdHomes() : base("homes", "List your homes", new[] { "listhomes" }) { }
 
         internal override TextCommandResult Execute(TextCommandCallingArgs args) {
-            EssPlayer player = EssPlayer.Get(args.Caller.Player);
+            BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
             if (player == null) {
                 return TextCommandResult.Error("Player only command.");
             }
 
             IEnumerable<string> homes = player.ListHomes();
-            if (homes == null || homes.Count() == 0) {
+            if (homes == null || !homes.Any()) {
                 return TextCommandResult.Success("You don't have any homes set.");
             }
 

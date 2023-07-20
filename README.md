@@ -1,1 +1,1 @@
-# Vintage Story Essentials
+# Vintage Story Basic Commands

@@ -7,21 +7,21 @@ using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 
-namespace Essentials.Player {
-    internal class EssPlayer {
-        private static readonly ConcurrentDictionary<string, EssPlayer> players = new ConcurrentDictionary<string, EssPlayer>();
-        private static readonly string DATA_KEY = "EssentialsData";
+namespace BasicCommands.Player {
+    internal class BasicPlayer {
+        private static readonly ConcurrentDictionary<string, BasicPlayer> players = new();
+        private static readonly string DATA_KEY = "BasicCommands";
 
-        internal static EssPlayer Get(IPlayer player) {
+        internal static BasicPlayer Get(IPlayer player) {
             return player is IServerPlayer sPlayer ? Get(sPlayer) : null;
         }
 
-        internal static EssPlayer Get(IServerPlayer player) {
-            return players.GetOrAdd(player.PlayerUID, k => new EssPlayer(player));
+        internal static BasicPlayer Get(IServerPlayer player) {
+            return players.GetOrAdd(player.PlayerUID, k => new BasicPlayer(player));
         }
 
         internal static void SaveAllPlayers() {
-            foreach (KeyValuePair<string, EssPlayer> player in players) {
+            foreach (KeyValuePair<string, BasicPlayer> player in players) {
                 if (player.Value.dirty) {
                     player.Value.dirty = false;
                     byte[] raw = SerializerUtil.Serialize(player.Value.data);
@@ -35,7 +35,7 @@ namespace Essentials.Player {
 
         private bool dirty;
 
-        internal EssPlayer(IServerPlayer player) {
+        internal BasicPlayer(IServerPlayer player) {
             this.player = player;
 
             byte[] raw = player.WorldData.GetModdata(DATA_KEY);
@@ -95,7 +95,7 @@ namespace Essentials.Player {
 
         [Serializable]
         internal class Data {
-            internal Dictionary<string, BlockPos> homes = new Dictionary<string, BlockPos>();
+            internal Dictionary<string, BlockPos> homes = new();
             internal BlockPos lastPos;
         }
     }

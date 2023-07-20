@@ -3,8 +3,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyTitle>Essentials</AssemblyTitle>
-    <Product>Essentials</Product>
+    <AssemblyTitle>BasicCommands</AssemblyTitle>
+    <Product>BasicCommands</Product>
     <Copyright>Copyright © 2023</Copyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>

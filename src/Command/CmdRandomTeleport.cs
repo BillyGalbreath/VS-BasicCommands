@@ -1,6 +1,6 @@
 ﻿using Vintagestory.API.Common;
 
-namespace Essentials.Command {
+namespace BasicCommands.Command {
     internal class CmdRandomTeleport : AbstractCommand {
         internal CmdRandomTeleport() : base("randomteleport", "Teleports you to a random location", new[] { "rtp", "tpr", "tprandom", "randomtp", "teleportrandom" }) {
         }

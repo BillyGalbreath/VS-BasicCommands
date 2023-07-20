@@ -1,13 +1,13 @@
 ﻿{
   "type": "code",
   "side": "Server",
-  "modid": "Essentials",
-  "name": "Essentials",
+  "modid": "BasicCommands",
+  "name": "BasicCommands",
   "author": "BillyGalbreath",
-  "description": "Basic essential commands",
+  "description": "Basic commands for Vintage Story servers",
   "version": "0.0.1",
   "dependency": {
     "game": ""
   },
-  "website": "https://github.com/BillyGalbreath/VS-Essentials"
+  "website": "https://github.com/BillyGalbreath/VS-BasicCommands"
 }

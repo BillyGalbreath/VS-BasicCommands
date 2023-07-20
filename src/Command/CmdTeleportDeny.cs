@@ -1,6 +1,6 @@
 ﻿using Vintagestory.API.Common;
 
-namespace Essentials.Command {
+namespace BasicCommands.Command {
     internal class CmdTeleportDeny : AbstractCommand {
         internal CmdTeleportDeny() : base("teleportdeny", "Rejects teleport requests", new[] { "tpdeny", "tpno" }) {
         }
