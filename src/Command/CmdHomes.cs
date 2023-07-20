@@ -3,7 +3,6 @@ using BasicCommands.Player;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 
 namespace BasicCommands.Command {
     public class CmdHomes : AbstractCommand {

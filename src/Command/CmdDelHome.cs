@@ -1,7 +1,6 @@
 ﻿using BasicCommands.Configuration;
 using BasicCommands.Player;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 
 namespace BasicCommands.Command {
     public class CmdDelHome : AbstractCommand {

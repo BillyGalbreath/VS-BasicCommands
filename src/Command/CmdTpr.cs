@@ -1,6 +1,5 @@
 ﻿using BasicCommands.Configuration;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 
 namespace BasicCommands.Command {
     public class CmdTpr : AbstractCommand {

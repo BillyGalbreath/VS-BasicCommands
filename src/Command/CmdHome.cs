@@ -2,7 +2,6 @@
 using BasicCommands.Player;
 using System.Text.RegularExpressions;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
 namespace BasicCommands.Command {

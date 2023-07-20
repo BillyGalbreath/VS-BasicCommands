@@ -1,7 +1,5 @@
 ﻿using BasicCommands.Configuration;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
-using Vintagestory.API.Server;
 
 namespace BasicCommands.Command {
     public abstract class AbstractCommand {
