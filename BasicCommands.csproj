@@ -17,5 +17,8 @@
     <Reference Include="VintagestoryAPI">
       <HintPath>libs\VintagestoryAPI.dll</HintPath>
     </Reference>
+    <Reference Include="YamlDotNet">
+      <HintPath>libs\YamlDotNet.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
