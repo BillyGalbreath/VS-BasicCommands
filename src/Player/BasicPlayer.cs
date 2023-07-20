@@ -20,13 +20,13 @@ namespace BasicCommands.Player {
             return players.GetOrAdd(player.PlayerUID, k => new BasicPlayer(player));
         }
 
+        internal static void Remove(IServerPlayer player) {
+            Get(player).Save().Remove();
+        }
+
         internal static void SaveAllPlayers() {
-            foreach (KeyValuePair<string, BasicPlayer> player in players) {
-                if (player.Value.dirty) {
-                    player.Value.dirty = false;
-                    byte[] raw = SerializerUtil.Serialize(player.Value.data);
-                    player.Value.player.WorldData.SetModdata(DATA_KEY, raw);
-                }
+            foreach (BasicPlayer player in players.Values) {
+                player.Save();
             }
         }
 
@@ -91,6 +91,20 @@ namespace BasicCommands.Player {
 
         internal void UpdateLastPosition() {
             LastPos = player.Entity.Pos.AsBlockPos;
+        }
+
+        internal BasicPlayer Save() {
+            if (dirty) {
+                dirty = false;
+                byte[] raw = SerializerUtil.Serialize(data);
+                player.WorldData.SetModdata(DATA_KEY, raw);
+            }
+            return this;
+        }
+
+        internal BasicPlayer Remove() {
+            players.Remove(player.PlayerUID);
+            return this;
         }
 
         [Serializable]

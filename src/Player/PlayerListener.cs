@@ -28,6 +28,7 @@ namespace BasicCommands.Player {
         }
 
         private void OnPlayerDisconnect(IServerPlayer player) {
+            BasicPlayer.Remove(player);
         }
 
         private void OnPlayerDeath(IServerPlayer player, DamageSource damageSource) {
