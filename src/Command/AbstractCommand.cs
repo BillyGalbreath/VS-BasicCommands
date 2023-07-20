@@ -8,13 +8,20 @@ namespace Essentials.Command {
         internal AbstractCommand(string name, string description, params ICommandArgumentParser[] parsers) : this(name, description, Privilege.chat, null, parsers) { }
         internal AbstractCommand(string name, string description, string[] aliases, params ICommandArgumentParser[] parsers) : this(name, description, Privilege.chat, aliases, parsers) { }
         internal AbstractCommand(string name, string description, string privilege, string[] aliases, params ICommandArgumentParser[] parsers) {
-            EssentialsMod.Instance().API.ChatCommands
-                .Create(name)
-                .WithDescription(description)
-                .WithArgs(parsers)
-                .RequiresPrivilege(privilege)
-                .WithAlias(aliases)
-                .HandleWith(Execute);
+            IChatCommand cmd = EssentialsMod.Instance().API.ChatCommands.Create(name);
+            if (description != null && description.Length > 0) {
+                cmd.WithDescription(description);
+            }
+            if (parsers != null && parsers.Length > 0) {
+                cmd.WithArgs(parsers);
+            }
+            if (privilege != null && privilege.Length > 0) {
+                cmd.RequiresPrivilege(privilege);
+            }
+            if (aliases != null && aliases.Length > 0) {
+                cmd.WithAlias(aliases);
+            }
+            cmd.HandleWith(Execute);
         }
 
         internal abstract TextCommandResult Execute(TextCommandCallingArgs args);
