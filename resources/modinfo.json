@@ -1,7 +1,7 @@
 ﻿{
   "type": "code",
   "side": "Server",
-  "modid": "BasicCommands",
+  "modid": "basiccommands",
   "name": "BasicCommands",
   "author": "BillyGalbreath",
   "description": "Basic commands for Vintage Story servers",
