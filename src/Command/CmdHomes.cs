@@ -1,24 +1,26 @@
-﻿using BasicCommands.Player;
+﻿using BasicCommands.Configuration;
+using BasicCommands.Player;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 
 namespace BasicCommands.Command {
-    internal class CmdHomes : AbstractCommand {
-        internal CmdHomes() : base("homes", "List your homes", new[] { "listhomes" }) { }
+    public class CmdHomes : AbstractCommand {
+        public CmdHomes(Config.Command cmd) : base(cmd) { }
 
-        internal override TextCommandResult Execute(TextCommandCallingArgs args) {
+        public override TextCommandResult Execute(TextCommandCallingArgs args) {
             BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
             if (player == null) {
-                return TextCommandResult.Error("Player only command.");
+                return TextCommandResult.Error(Lang.Get("player-only-command", "0x0001"));
             }
 
             IEnumerable<string> homes = player.ListHomes();
             if (homes == null || !homes.Any()) {
-                return TextCommandResult.Success("You don't have any homes set.");
+                return TextCommandResult.Success(Lang.Get("no-homes-set"));
             }
 
-            return TextCommandResult.Success($"Homes: {string.Join(", ", homes)}");
+            return TextCommandResult.Success(Lang.Get("homes-success", string.Join(", ", homes)));
         }
     }
 }

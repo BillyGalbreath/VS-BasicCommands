@@ -8,23 +8,23 @@ using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 
 namespace BasicCommands.Player {
-    internal class BasicPlayer {
+    public class BasicPlayer {
         private static readonly ConcurrentDictionary<string, BasicPlayer> players = new();
         private static readonly string DATA_KEY = "BasicCommands";
 
-        internal static BasicPlayer Get(IPlayer player) {
+        public static BasicPlayer Get(IPlayer player) {
             return player is IServerPlayer sPlayer ? Get(sPlayer) : null;
         }
 
-        internal static BasicPlayer Get(IServerPlayer player) {
+        public static BasicPlayer Get(IServerPlayer player) {
             return players.GetOrAdd(player.PlayerUID, k => new BasicPlayer(player));
         }
 
-        internal static void Remove(IServerPlayer player) {
+        public static void Remove(IServerPlayer player) {
             Get(player).Save().Remove();
         }
 
-        internal static void SaveAllPlayers() {
+        public static void SaveAllPlayers() {
             foreach (BasicPlayer player in players.Values) {
                 player.Save();
             }
@@ -35,21 +35,21 @@ namespace BasicCommands.Player {
 
         private bool dirty;
 
-        internal BasicPlayer(IServerPlayer player) {
+        public BasicPlayer(IServerPlayer player) {
             this.player = player;
 
             byte[] raw = player.WorldData.GetModdata(DATA_KEY);
             data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
         }
 
-        internal BlockPos BlockPos {
+        public BlockPos BlockPos {
             get {
                 return player.Entity.Pos.AsBlockPos;
             }
             private set { }
         }
 
-        internal BlockPos LastPos {
+        public BlockPos LastPos {
             get {
                 return data.lastPos;
             }
@@ -59,20 +59,20 @@ namespace BasicCommands.Player {
             }
         }
 
-        internal IEnumerable<string> ListHomes() {
+        public IEnumerable<string> ListHomes() {
             return data.homes.Keys;
         }
 
-        internal BlockPos GetHome(string name) {
+        public BlockPos GetHome(string name) {
             return data.homes.Get(name);
         }
 
-        internal void AddHome(string name, BlockPos pos) {
+        public void AddHome(string name, BlockPos pos) {
             data.homes.Add(name, pos);
             dirty = true;
         }
 
-        internal bool RemoveHome(string name) {
+        public bool RemoveHome(string name) {
             bool result = data.homes.Remove(name);
             if (result) {
                 dirty = true;
@@ -80,20 +80,20 @@ namespace BasicCommands.Player {
             return result;
         }
 
-        internal void SendMessage(string message) {
+        public void SendMessage(string message) {
             player.SendMessage(GlobalConstants.GeneralChatGroup, message, EnumChatType.CommandSuccess);
         }
 
-        internal void TeleportTo(BlockPos pos) {
+        public void TeleportTo(BlockPos pos) {
             UpdateLastPosition();
             player.Entity.TeleportTo(pos);
         }
 
-        internal void UpdateLastPosition() {
+        public void UpdateLastPosition() {
             LastPos = player.Entity.Pos.AsBlockPos;
         }
 
-        internal BasicPlayer Save() {
+        public BasicPlayer Save() {
             if (dirty) {
                 dirty = false;
                 byte[] raw = SerializerUtil.Serialize(data);
@@ -102,13 +102,13 @@ namespace BasicCommands.Player {
             return this;
         }
 
-        internal BasicPlayer Remove() {
+        public BasicPlayer Remove() {
             players.Remove(player.PlayerUID);
             return this;
         }
 
         [Serializable]
-        internal class Data {
+        public class Data {
             internal Dictionary<string, BlockPos> homes = new();
             internal BlockPos lastPos;
         }

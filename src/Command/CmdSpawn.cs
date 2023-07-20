@@ -1,20 +1,21 @@
-﻿using BasicCommands.Player;
+﻿using BasicCommands.Configuration;
+using BasicCommands.Player;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 
 namespace BasicCommands.Command {
-    internal class CmdSpawn : AbstractCommand {
-        internal CmdSpawn() : base("spawn", "Teleport to the spawnpoint") {
-        }
+    public class CmdSpawn : AbstractCommand {
+        public CmdSpawn(Config.Command cmd) : base(cmd) { }
 
-        internal override TextCommandResult Execute(TextCommandCallingArgs args) {
+        public override TextCommandResult Execute(TextCommandCallingArgs args) {
             BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
             if (player == null) {
-                return TextCommandResult.Error("Player only command.");
+                return TextCommandResult.Error(Lang.Get("player-only-command", "0x0001"));
             }
 
             player.TeleportTo(BasicCommandsMod.Instance().API.World.DefaultSpawnPosition.AsBlockPos);
 
-            return TextCommandResult.Success("Teleported to spawn.");
+            return TextCommandResult.Success(Lang.Get("spawn-success"));
         }
     }
 }

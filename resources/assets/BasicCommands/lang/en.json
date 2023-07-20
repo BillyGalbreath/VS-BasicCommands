@@ -1,3 +1,24 @@
 ﻿{
-  "key": "value"
+  "player-only-command": "Player only command.",
+  "must-specify-home": "Must specify a home name.",
+  "invalid-home-name": "Invalid home name.",
+  "home-doesnt-exist": "Home named {0} does not exist.",
+  "no-homes-set": "You don't have any homes set.",
+  "back-description": "Teleports you to your previous location.",
+  "back-empty": "No back location to go to.",
+  "back-success": "Teleported to your previous location.",
+  "delhome-description": "Removes a home.",
+  "delhome-success": "Deleted home named {0}.",
+  "home-description": "Teleport to your home.",
+  "home-success": "Teleported to {0}.",
+  "homes-description": "List your homes.",
+  "homes-success": "Homes: {0}",
+  "randomteleport-description": "Teleports you to a random location.",
+  "sethome-description": "Set home to your current location.",
+  "sethome-success": "Home {0} has been set.",
+  "spawn-description": "Teleport to the spawnpoint.",
+  "spawn-success": "Teleported to spawn.",
+  "teleportaccept-description": "Accepts pending teleport requests.",
+  "teleportdeny-description": "Rejects pending teleport requests.",
+  "teleportrequest-description": "Request to teleport to another player."
 }

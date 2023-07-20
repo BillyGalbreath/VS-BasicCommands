@@ -2,8 +2,8 @@
 using Vintagestory.API.Server;
 
 namespace BasicCommands.Player {
-    internal class PlayerListener {
-        internal PlayerListener() {
+    public class PlayerListener {
+        public PlayerListener() {
             BasicCommandsMod mod = BasicCommandsMod.Instance();
 
             mod.API.Event.PlayerCreate += OnPlayerCreate;

@@ -1,23 +1,25 @@
-﻿using BasicCommands.Player;
+﻿using BasicCommands.Configuration;
+using BasicCommands.Player;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 
 namespace BasicCommands.Command {
-    internal class CmdBack : AbstractCommand {
-        internal CmdBack() : base("back", "Teleports you to your previous location", new[] { "return" }) { }
+    public class CmdBack : AbstractCommand {
+        public CmdBack(Config.Command cmd) : base(cmd) { }
 
-        internal override TextCommandResult Execute(TextCommandCallingArgs args) {
+        public override TextCommandResult Execute(TextCommandCallingArgs args) {
             BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
             if (player == null) {
-                return TextCommandResult.Error("Player only command.");
+                return TextCommandResult.Error(Lang.Get("player-only-command", "0x0001"));
             }
 
             if (player.LastPos == null) {
-                return TextCommandResult.Success("No back location to go to.");
+                return TextCommandResult.Success(Lang.Get("back-empty"));
             }
 
             player.TeleportTo(player.LastPos);
 
-            return TextCommandResult.Success("Teleported to your previous location.");
+            return TextCommandResult.Success(Lang.Get("back-success"));
         }
     }
 }
