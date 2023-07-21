@@ -4,16 +4,16 @@ using BasicCommands.TeleportRequest;
 using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
-    public class CmdTpDeny : AbstractCommand {
-        public CmdTpDeny(Config.Command cmd) : base(cmd) { }
+    public class CmdTpCancel : AbstractCommand {
+        public CmdTpCancel(Config.Command cmd) : base(cmd) { }
 
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
-            TpRequest request = TpRequest.GetPendingForTarget(player);
+            TpRequest request = TpRequest.GetPendingForSender(player);
             if (request == null) {
                 return TextCommandResult.Success(Lang.Get("teleport-request-nothing-pending"));
             }
             request.Remove();
-            request.Message("denied");
+            request.Message("cancelled");
             return TextCommandResult.Success();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using BasicCommands.Configuration;
 using BasicCommands.Player;
+using BasicCommands.TeleportRequest;
 using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
@@ -7,7 +8,13 @@ namespace BasicCommands.Command {
         public CmdTpAccept(Config.Command cmd) : base(cmd) { }
 
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
-            throw new System.NotImplementedException();
+            TpRequest request = TpRequest.GetPendingForTarget(player);
+            if (request == null) {
+                return TextCommandResult.Success(Lang.Get("teleport-request-nothing-pending"));
+            }
+            request.Accept();
+            request.Message("accepted");
+            return TextCommandResult.Success();
         }
     }
 }

@@ -41,8 +41,11 @@ namespace BasicCommands {
             _ = new CmdSpawn(Config.cmdSpawn);
             _ = new CmdTpa(Config.cmdTpa);
             _ = new CmdTpAccept(Config.cmdTpAccept);
+            _ = new CmdTpaHere(Config.cmdTpaHere);
+            _ = new CmdTpCancel(Config.cmdTpCancel);
             _ = new CmdTpDeny(Config.cmdTpDeny);
             _ = new CmdTpr(Config.cmdTpr);
+            _ = new CmdTpToggle(Config.cmdTpToggle);
         }
 
         private void OnGameWorldSave() {

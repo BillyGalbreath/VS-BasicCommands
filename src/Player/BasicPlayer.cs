@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BasicCommands.TeleportRequest;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Vintagestory.API.Common;
@@ -31,18 +32,23 @@ namespace BasicCommands.Player {
         }
 
         private readonly IServerPlayer player;
-        private readonly Data data;
 
+        private Data data;
         private bool dirty;
 
-        public BasicPlayer(IServerPlayer player) {
+        private BasicPlayer(IServerPlayer player) {
             this.player = player;
-
-            byte[] raw = player.WorldData.GetModdata(DATA_KEY);
-            data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
+            Load();
         }
 
-        public BlockPos BlockPos {
+        public string Name {
+            get {
+                return player.PlayerName;
+            }
+            private set { }
+        }
+
+        public BlockPos CurPos {
             get {
                 return player.Entity.Pos.AsBlockPos;
             }
@@ -54,8 +60,20 @@ namespace BasicCommands.Player {
                 return data.lastPos;
             }
             set {
+                bool changed = !data.lastPos.Equals(value);
                 data.lastPos = value;
-                dirty = true;
+                dirty |= changed;
+            }
+        }
+
+        public bool AllowTeleportRequests {
+            get {
+                return data.allowTeleportRequests;
+            }
+            set {
+                bool changed = data.allowTeleportRequests != value;
+                data.allowTeleportRequests = value;
+                dirty |= changed;
             }
         }
 
@@ -68,20 +86,21 @@ namespace BasicCommands.Player {
         }
 
         public void AddHome(string name, BlockPos pos) {
+            bool changed = !pos.Equals(data.homes.Get(name));
             data.homes.Add(name, pos);
-            dirty = true;
+            dirty |= changed;
         }
 
         public bool RemoveHome(string name) {
-            bool result = data.homes.Remove(name);
-            if (result) {
-                dirty = true;
-            }
-            return result;
+            bool changed = data.homes.Remove(name);
+            dirty |= changed;
+            return changed;
         }
 
         public void SendMessage(string message) {
-            player.SendMessage(GlobalConstants.GeneralChatGroup, message, EnumChatType.CommandSuccess);
+            if (message != null && message.Length > 0) {
+                player.SendMessage(GlobalConstants.GeneralChatGroup, message, EnumChatType.CommandSuccess);
+            }
         }
 
         public void TeleportTo(BlockPos pos) {
@@ -90,7 +109,13 @@ namespace BasicCommands.Player {
         }
 
         public void UpdateLastPosition() {
-            LastPos = player.Entity.Pos.AsBlockPos;
+            LastPos = CurPos;
+        }
+
+        private BasicPlayer Load() {
+            byte[] raw = player.WorldData.GetModdata(DATA_KEY);
+            data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
+            return this;
         }
 
         public BasicPlayer Save() {
@@ -108,9 +133,11 @@ namespace BasicCommands.Player {
         }
 
         [Serializable]
-        public class Data {
+        private class Data {
             internal Dictionary<string, BlockPos> homes = new();
             internal BlockPos lastPos;
+            internal Dictionary<string, BlockPos> teleportRequests = new();
+            internal bool allowTeleportRequests = true;
         }
     }
 }

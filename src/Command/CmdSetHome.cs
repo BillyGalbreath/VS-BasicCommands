@@ -16,7 +16,7 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("invalid-home-name"));
             }
 
-            player.AddHome(name, player.BlockPos);
+            player.AddHome(name, player.CurPos);
 
             return TextCommandResult.Success(Lang.Get("sethome-success", name));
         }
