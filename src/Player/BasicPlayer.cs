@@ -116,10 +116,15 @@ namespace BasicCommands.Player {
         }
 
         private BasicPlayer Load() {
-            Console.WriteLine("Loading");
-            byte[] raw = player.WorldData.GetModdata(DATA_KEY);
-            data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
-            Console.WriteLine("Null? " + (raw == null));
+            try {
+                Console.WriteLine("Loading");
+                byte[] raw = player.WorldData.GetModdata(DATA_KEY);
+                data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
+                Console.WriteLine("Null? " + (raw == null));
+            } catch (Exception e) {
+                Console.WriteLine("oopsie");
+                data = new Data();
+            }
             return this;
         }
 
