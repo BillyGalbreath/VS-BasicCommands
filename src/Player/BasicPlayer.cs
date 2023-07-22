@@ -135,6 +135,23 @@ namespace BasicCommands.Player {
             return this;
         }
 
+        public override bool Equals(object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (obj is not BasicPlayer other) {
+                return false;
+            }
+            return player.PlayerUID.Equals(other.player.PlayerUID);
+        }
+
+        public override int GetHashCode() {
+            return player.PlayerUID.GetHashCode();
+        }
+
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private class Data {
             internal Dictionary<string, BlockPos> homes = new();
