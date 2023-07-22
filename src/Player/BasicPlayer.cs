@@ -1,7 +1,7 @@
-﻿using System;
+﻿using ProtoBuf;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text.Json;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
@@ -118,7 +118,7 @@ namespace BasicCommands.Player {
         private BasicPlayer Load() {
             Console.WriteLine("Loading");
             byte[] raw = player.WorldData.GetModdata(DATA_KEY);
-            data = raw == null ? new Data() : JsonSerializer.Deserialize<Data>(raw);
+            data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
             Console.WriteLine("Null? " + (raw == null));
             return this;
         }
@@ -128,7 +128,7 @@ namespace BasicCommands.Player {
             if (dirty) {
                 Console.WriteLine("Dirty");
                 dirty = false;
-                byte[] raw = JsonSerializer.SerializeToUtf8Bytes(data);
+                byte[] raw = SerializerUtil.Serialize(data);
                 player.WorldData.SetModdata(DATA_KEY, raw);
             }
             return this;
@@ -139,7 +139,7 @@ namespace BasicCommands.Player {
             return this;
         }
 
-        [Serializable]
+        [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private class Data {
             internal Dictionary<string, BlockPos> homes = new();
             internal BlockPos lastPos;
