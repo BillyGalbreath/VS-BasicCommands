@@ -116,13 +116,17 @@ namespace BasicCommands.Player {
         }
 
         private BasicPlayer Load() {
+            Console.WriteLine("Loading");
             byte[] raw = player.WorldData.GetModdata(DATA_KEY);
             data = raw == null ? new Data() : JsonSerializer.Deserialize<Data>(raw);
+            Console.WriteLine("Null? " + (raw == null));
             return this;
         }
 
         public BasicPlayer Save() {
+            Console.WriteLine("Saving");
             if (dirty) {
+                Console.WriteLine("Dirty");
                 dirty = false;
                 byte[] raw = JsonSerializer.SerializeToUtf8Bytes(data);
                 player.WorldData.SetModdata(DATA_KEY, raw);
