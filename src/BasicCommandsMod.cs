@@ -20,6 +20,10 @@ namespace BasicCommands {
             instance = this;
         }
 
+        public override bool ShouldLoad(EnumAppSide side) {
+            return side == EnumAppSide.Server;
+        }
+
         public override void StartServerSide(ICoreServerAPI api) {
             API = api;
 
