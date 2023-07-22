@@ -21,7 +21,7 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("invalid-home-name"));
             }
 
-            BlockPos pos = sender.GetHome(name);
+            Vec3i pos = sender.GetHome(name);
             if (pos == null) {
                 return TextCommandResult.Success(Lang.Get("home-doesnt-exist", name));
             }

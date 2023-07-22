@@ -48,14 +48,14 @@ namespace BasicCommands.Player {
             private set { }
         }
 
-        public BlockPos CurPos {
+        public Vec3i CurPos {
             get {
-                return player.Entity.Pos.AsBlockPos;
+                return player.Entity.Pos.XYZInt;
             }
             private set { }
         }
 
-        public BlockPos LastPos {
+        public Vec3i LastPos {
             get {
                 return data.lastPos;
             }
@@ -81,11 +81,11 @@ namespace BasicCommands.Player {
             return data.homes.Keys;
         }
 
-        public BlockPos GetHome(string name) {
+        public Vec3i GetHome(string name) {
             return data.homes.Get(name);
         }
 
-        public void AddHome(string name, BlockPos pos) {
+        public void AddHome(string name, Vec3i pos) {
             bool changed = !pos.Equals(data.homes.Get(name));
             data.homes.Add(name, pos);
             dirty |= changed;
@@ -103,12 +103,12 @@ namespace BasicCommands.Player {
             }
         }
 
-        public void TeleportTo(BlockPos pos) {
+        public void TeleportTo(Vec3i pos) {
             if (pos == null) {
                 throw new ArgumentNullException(nameof(pos), "Cannot teleport to null!");
             }
             UpdateLastPosition();
-            player.Entity.TeleportTo(pos);
+            player.Entity.TeleportTo(new Vec3d().Set(pos));
         }
 
         public void UpdateLastPosition() {
@@ -154,9 +154,9 @@ namespace BasicCommands.Player {
 
         [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
         private class Data {
-            internal Dictionary<string, BlockPos> homes = new();
-            internal BlockPos lastPos;
-            internal Dictionary<string, BlockPos> teleportRequests = new();
+            internal Dictionary<string, Vec3i> homes = new();
+            internal Vec3i lastPos;
+            internal Dictionary<string, Vec3i> teleportRequests = new();
             internal bool allowTeleportRequests = true;
         }
     }
