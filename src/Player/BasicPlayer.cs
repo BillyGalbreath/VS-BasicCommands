@@ -108,7 +108,7 @@ namespace BasicCommands.Player {
                 throw new ArgumentNullException(nameof(pos), "Cannot teleport to null!");
             }
             UpdateLastPosition();
-            player.Entity.TeleportTo(new Vec3d(pos.X + 0.5F, pos.Y + 0.5F, pos.Z + 0.5F));
+            player.Entity.TeleportTo(new Vec3d(pos.X + 0.5F, pos.Y, pos.Z + 0.5F));
         }
 
         public void UpdateLastPosition() {
