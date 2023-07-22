@@ -13,6 +13,10 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("player-not-found"));
             }
 
+            if (player.Equals(target)) {
+                return TextCommandResult.Success(Lang.Get("teleport-request-self-not-allowed"));
+            }
+
             if (!target.AllowTeleportRequests) {
                 return TextCommandResult.Success(Lang.Get("teleport-request-disabled", target.Name));
             }
