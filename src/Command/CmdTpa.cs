@@ -17,6 +17,14 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("teleport-request-disabled", target.Name));
             }
 
+            if (TpRequest.HasPendingForTarget(target)) {
+                return TextCommandResult.Success(Lang.Get("teleport-request-pending-target", target.Name));
+            }
+
+            if (TpRequest.HasPendingForSender(player)) {
+                return TextCommandResult.Success(Lang.Get("teleport-request-pending-sender"));
+            }
+
             TpRequest.Add(Create(player, target));
 
             return TextCommandResult.Success();

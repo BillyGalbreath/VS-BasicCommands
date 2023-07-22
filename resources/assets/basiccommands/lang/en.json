@@ -46,13 +46,9 @@
   "teleport-request-denied-target": "Pending teleport request from {0} has been denied.",
   "teleport-request-expired-sender": "Pending teleport request to {0} has expired.",
   "teleport-request-expired-target": "Pending teleport request from {0} has expired.",
+  "teleport-request-pending-sender": "You already have a pending teleport request.",
+  "teleport-request-pending-target": "{0} already has a pending teleport request.",
 
   "on": "on",
-  "off": "off",
-  "true": "true",
-  "false": "false",
-  "enable": "enable",
-  "disable": "disable",
-  "enabled": "enabled",
-  "disabled": "disabled"
+  "off": "off"
 }

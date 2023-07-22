@@ -15,6 +15,10 @@ namespace BasicCommands.TeleportRequest {
             return requests.Keys.Where(request => request.sender == sender).FirstOrDefault();
         }
 
+        public static bool HasPendingForSender(BasicPlayer sender) {
+            return GetPendingForSender(sender) != null;
+        }
+
         public static TpRequest RemovePendingForSender(BasicPlayer sender) {
             TpRequest pending = GetPendingForSender(sender);
             pending?.Remove();
@@ -23,6 +27,10 @@ namespace BasicCommands.TeleportRequest {
 
         public static TpRequest GetPendingForTarget(BasicPlayer target) {
             return requests.Keys.Where(request => request.target == target).FirstOrDefault();
+        }
+
+        public static bool HasPendingForTarget(BasicPlayer target) {
+            return GetPendingForSender(target) != null;
         }
 
         public static TpRequest RemovePendingForTarget(BasicPlayer target) {
