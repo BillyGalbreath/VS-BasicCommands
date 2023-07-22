@@ -1,7 +1,6 @@
 ﻿using BasicCommands.Configuration;
 using BasicCommands.Player;
 using BasicCommands.TeleportRequest;
-using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdTpaHere : CmdTpa {

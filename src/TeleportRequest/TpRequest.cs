@@ -1,10 +1,7 @@
 ﻿using BasicCommands.Configuration;
 using BasicCommands.Player;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
-using Vintagestory.API.Util;
 
 namespace BasicCommands.TeleportRequest {
     public abstract class TpRequest {

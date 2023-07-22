@@ -1,5 +1,4 @@
 ﻿using BasicCommands.Player;
-using System.Threading.Tasks;
 
 namespace BasicCommands.TeleportRequest {
     public class TpaRequest : TpRequest {

@@ -1,5 +1,4 @@
-﻿using BasicCommands.TeleportRequest;
-using System;
+﻿using ProtoBuf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Vintagestory.API.Common;
@@ -60,7 +59,7 @@ namespace BasicCommands.Player {
                 return data.lastPos;
             }
             set {
-                bool changed = !data.lastPos.Equals(value);
+                bool changed = !value.Equals(data.lastPos);
                 data.lastPos = value;
                 dirty |= changed;
             }
@@ -132,7 +131,7 @@ namespace BasicCommands.Player {
             return this;
         }
 
-        [Serializable]
+        [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
         private class Data {
             internal Dictionary<string, BlockPos> homes = new();
             internal BlockPos lastPos;
