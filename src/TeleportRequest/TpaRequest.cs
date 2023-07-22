@@ -5,7 +5,7 @@ namespace BasicCommands.TeleportRequest {
         public TpaRequest(BasicPlayer sender, BasicPlayer target) : base(sender, target) { }
 
         public override void Accept() {
-            throw new System.NotImplementedException();
+            sender.TeleportTo(target.CurPos);
         }
     }
 }
