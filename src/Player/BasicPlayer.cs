@@ -1,6 +1,7 @@
-﻿using ProtoBuf;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Text.Json;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
@@ -103,6 +104,9 @@ namespace BasicCommands.Player {
         }
 
         public void TeleportTo(BlockPos pos) {
+            if (pos == null) {
+                throw new ArgumentNullException(nameof(pos), "Cannot teleport to null!");
+            }
             UpdateLastPosition();
             player.Entity.TeleportTo(pos);
         }
@@ -113,14 +117,14 @@ namespace BasicCommands.Player {
 
         private BasicPlayer Load() {
             byte[] raw = player.WorldData.GetModdata(DATA_KEY);
-            data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
+            data = raw == null ? new Data() : JsonSerializer.Deserialize<Data>(raw);
             return this;
         }
 
         public BasicPlayer Save() {
             if (dirty) {
                 dirty = false;
-                byte[] raw = SerializerUtil.Serialize(data);
+                byte[] raw = JsonSerializer.SerializeToUtf8Bytes(data);
                 player.WorldData.SetModdata(DATA_KEY, raw);
             }
             return this;
@@ -131,7 +135,7 @@ namespace BasicCommands.Player {
             return this;
         }
 
-        [ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+        [Serializable]
         private class Data {
             internal Dictionary<string, BlockPos> homes = new();
             internal BlockPos lastPos;
