@@ -116,22 +116,13 @@ namespace BasicCommands.Player {
         }
 
         private BasicPlayer Load() {
-            try {
-                Console.WriteLine("Loading");
-                byte[] raw = player.WorldData.GetModdata(DATA_KEY);
-                data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
-                Console.WriteLine("Null? " + (raw == null));
-            } catch (Exception e) {
-                Console.WriteLine("oopsie");
-                data = new Data();
-            }
+            byte[] raw = player.WorldData.GetModdata(DATA_KEY);
+            data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
             return this;
         }
 
         public BasicPlayer Save() {
-            Console.WriteLine("Saving");
             if (dirty) {
-                Console.WriteLine("Dirty");
                 dirty = false;
                 byte[] raw = SerializerUtil.Serialize(data);
                 player.WorldData.SetModdata(DATA_KEY, raw);
