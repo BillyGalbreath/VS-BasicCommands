@@ -5,7 +5,7 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdTpa : AbstractCommand {
-        public CmdTpa(Config.Command cmd) : base(cmd, new OnlinePlayerArgParser("target", BasicCommandsMod.Instance().API, true)) { }
+        public CmdTpa() : base(new OnlinePlayerArgParser("target", BasicCommandsMod.Instance().API, true)) { }
 
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             BasicPlayer target = BasicPlayer.Get((IPlayer)args[0]);

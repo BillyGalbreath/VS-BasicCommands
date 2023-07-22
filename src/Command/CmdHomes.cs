@@ -6,8 +6,6 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdHomes : AbstractCommand {
-        public CmdHomes(Config.Command cmd) : base(cmd) { }
-
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             IEnumerable<string> homes = player.ListHomes();
             if (homes == null || !homes.Any()) {

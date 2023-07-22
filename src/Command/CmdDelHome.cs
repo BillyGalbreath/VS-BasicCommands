@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdDelHome : AbstractCommand {
-        public CmdDelHome(Config.Command cmd) : base(cmd, new WordArgParser("name", true)) { }
+        public CmdDelHome() : base(new WordArgParser("name", true)) { }
 
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             if (args.Parsers[0].IsMissing) {

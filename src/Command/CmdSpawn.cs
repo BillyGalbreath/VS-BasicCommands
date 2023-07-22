@@ -4,8 +4,6 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdSpawn : AbstractCommand {
-        public CmdSpawn(Config.Command cmd) : base(cmd) { }
-
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             player.TeleportTo(BasicCommandsMod.Instance().API.World.DefaultSpawnPosition.AsBlockPos);
 

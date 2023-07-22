@@ -1,11 +1,17 @@
 ﻿using BasicCommands.Configuration;
 using BasicCommands.Player;
 using Vintagestory.API.Common;
+using Vintagestory.API.Util;
 
 namespace BasicCommands.Command {
     public abstract class AbstractCommand {
-        public AbstractCommand(Config.Command cmd, params ICommandArgumentParser[] parsers) {
-            IChatCommand chatCmd = BasicCommandsMod.Instance().API.ChatCommands
+        public AbstractCommand(params ICommandArgumentParser[] parsers) {
+            BasicCommandsMod mod = BasicCommandsMod.Instance();
+            Config.Command cmd = mod.Config.commands.Get(GetType().Name.ToLower());
+            if (!cmd.enabled) {
+                return;
+            }
+            IChatCommand chatCmd = mod.API.ChatCommands
                 .Create(cmd.name)
                 .WithDescription(Lang.Get($"{cmd.name}-description"))
                 .RequiresPrivilege($"basiccommands.{cmd.name}")

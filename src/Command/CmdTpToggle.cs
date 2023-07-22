@@ -5,7 +5,7 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdTpToggle : AbstractCommand {
-        public CmdTpToggle(Config.Command cmd) : base(cmd, new BoolArgParser("on|off", "enable", false)) { }
+        public CmdTpToggle() : base(new BoolArgParser("on|off", "enable", false)) { }
 
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             bool enabled = args.Parsers[0].IsMissing ? !player.AllowTeleportRequests : (bool)args[0];

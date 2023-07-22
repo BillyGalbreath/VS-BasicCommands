@@ -5,8 +5,6 @@ using Vintagestory.API.MathTools;
 
 namespace BasicCommands.Command {
     public class CmdBack : AbstractCommand {
-        public CmdBack(Config.Command cmd) : base(cmd) { }
-
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             BlockPos lastPos = player.LastPos;
             if (lastPos == null) {

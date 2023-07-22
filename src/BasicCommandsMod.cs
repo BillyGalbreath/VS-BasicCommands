@@ -33,19 +33,19 @@ namespace BasicCommands {
 
             _ = new PlayerListener();
 
-            _ = new CmdBack(Config.cmdBack);
-            _ = new CmdDelHome(Config.cmdDelHome);
-            _ = new CmdHome(Config.cmdHome);
-            _ = new CmdHomes(Config.cmdHomes);
-            _ = new CmdSetHome(Config.cmdSetHome);
-            _ = new CmdSpawn(Config.cmdSpawn);
-            _ = new CmdTpa(Config.cmdTpa);
-            _ = new CmdTpAccept(Config.cmdTpAccept);
-            _ = new CmdTpaHere(Config.cmdTpaHere);
-            _ = new CmdTpCancel(Config.cmdTpCancel);
-            _ = new CmdTpDeny(Config.cmdTpDeny);
-            _ = new CmdTpr(Config.cmdTpr);
-            _ = new CmdTpToggle(Config.cmdTpToggle);
+            _ = new CmdBack();
+            _ = new CmdDelHome();
+            _ = new CmdHome();
+            _ = new CmdHomes();
+            _ = new CmdSetHome();
+            _ = new CmdSpawn();
+            _ = new CmdTpa();
+            _ = new CmdTpAccept();
+            _ = new CmdTpaHere();
+            _ = new CmdTpCancel();
+            _ = new CmdTpDeny();
+            _ = new CmdTpr();
+            _ = new CmdTpToggle();
         }
 
         private void OnGameWorldSave() {

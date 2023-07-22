@@ -5,8 +5,6 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdTpCancel : AbstractCommand {
-        public CmdTpCancel(Config.Command cmd) : base(cmd) { }
-
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             TpRequest request = TpRequest.GetPendingForSender(player);
             if (request == null) {

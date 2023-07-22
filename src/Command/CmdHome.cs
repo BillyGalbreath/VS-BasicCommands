@@ -9,7 +9,7 @@ namespace BasicCommands.Command {
         [GeneratedRegex("^(?i)[a-z][a-z0-9]*$", RegexOptions.None, "en-US")]
         public static partial Regex ValidName();
 
-        public CmdHome(Config.Command cmd) : base(cmd, new WordArgParser("name", true)) { }
+        public CmdHome() : base(new WordArgParser("name", true)) { }
 
         public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
             if (args.Parsers[0].IsMissing) {
