@@ -6,7 +6,7 @@ namespace BasicCommands.Command {
     public class CmdDelHome : AbstractCommand {
         public CmdDelHome() : base(new WordArgParser("name", true)) { }
 
-        public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
+        public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
             if (args.Parsers[0].IsMissing) {
                 return TextCommandResult.Success(Lang.Get("must-specify-home"));
             }
@@ -16,7 +16,7 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("invalid-home-name"));
             }
 
-            if (!player.RemoveHome(name)) {
+            if (!sender.RemoveHome(name)) {
                 return TextCommandResult.Success(Lang.Get("home-doesnt-exist", name));
             }
 

@@ -5,8 +5,8 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command {
     public class CmdTpCancel : AbstractCommand {
-        public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
-            TpRequest request = TpRequest.GetPendingForSender(player);
+        public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+            TpRequest request = TpRequest.GetPendingForSender(sender);
             if (request == null) {
                 return TextCommandResult.Success(Lang.Get("teleport-request-nothing-pending"));
             }

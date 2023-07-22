@@ -11,7 +11,7 @@ namespace BasicCommands.Command {
 
         public CmdHome() : base(new WordArgParser("name", true)) { }
 
-        public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
+        public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
             if (args.Parsers[0].IsMissing) {
                 return TextCommandResult.Success(Lang.Get("must-specify-home"));
             }
@@ -21,12 +21,12 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("invalid-home-name"));
             }
 
-            BlockPos pos = player.GetHome(name);
+            BlockPos pos = sender.GetHome(name);
             if (pos == null) {
                 return TextCommandResult.Success(Lang.Get("home-doesnt-exist", name));
             }
 
-            player.TeleportTo(pos);
+            sender.TeleportTo(pos);
 
             return TextCommandResult.Success(Lang.Get("home-success", name));
         }

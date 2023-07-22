@@ -4,18 +4,17 @@ using Vintagestory.API.Server;
 namespace BasicCommands.Player {
     public class PlayerListener {
         public PlayerListener() {
-            BasicCommandsMod mod = BasicCommandsMod.Instance();
+            IServerEventAPI Event = BasicCommandsMod.Instance().API.Event;
+            Event.PlayerCreate += OnPlayerCreate;
+            Event.PlayerJoin += OnPlayerJoin;
+            Event.PlayerDisconnect += OnPlayerDisconnect;
+            Event.PlayerDeath += OnPlayerDeath;
 
-            mod.API.Event.PlayerCreate += OnPlayerCreate;
-            mod.API.Event.PlayerJoin += OnPlayerJoin;
-            mod.API.Event.PlayerDisconnect += OnPlayerDisconnect;
-            mod.API.Event.PlayerDeath += OnPlayerDeath;
-
-            mod.API.Event.ServerRunPhase(EnumServerRunPhase.Shutdown, () => {
-                mod.API.Event.PlayerCreate -= OnPlayerCreate;
-                mod.API.Event.PlayerJoin -= OnPlayerJoin;
-                mod.API.Event.PlayerDisconnect -= OnPlayerDisconnect;
-                mod.API.Event.PlayerDeath -= OnPlayerDeath;
+            Event.ServerRunPhase(EnumServerRunPhase.Shutdown, () => {
+                Event.PlayerCreate -= OnPlayerCreate;
+                Event.PlayerJoin -= OnPlayerJoin;
+                Event.PlayerDisconnect -= OnPlayerDisconnect;
+                Event.PlayerDeath -= OnPlayerDeath;
             });
         }
 

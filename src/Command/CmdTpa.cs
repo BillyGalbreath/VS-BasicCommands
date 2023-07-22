@@ -7,13 +7,13 @@ namespace BasicCommands.Command {
     public class CmdTpa : AbstractCommand {
         public CmdTpa() : base(new OnlinePlayerArgParser("target", BasicCommandsMod.Instance().API, true)) { }
 
-        public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
+        public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
             BasicPlayer target = BasicPlayer.Get((IPlayer)args[0]);
             if (target == null) {
                 return TextCommandResult.Success(Lang.Get("player-not-found"));
             }
 
-            if (player.Equals(target)) {
+            if (sender.Equals(target)) {
                 return TextCommandResult.Success(Lang.Get("teleport-request-self-not-allowed"));
             }
 
@@ -25,11 +25,11 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("teleport-request-pending-target", target.Name));
             }
 
-            if (TpRequest.HasPendingForSender(player)) {
+            if (TpRequest.HasPendingForSender(sender)) {
                 return TextCommandResult.Success(Lang.Get("teleport-request-pending-sender"));
             }
 
-            TpRequest.Add(Create(player, target));
+            TpRequest.Add(Create(sender, target));
 
             return TextCommandResult.Success();
         }

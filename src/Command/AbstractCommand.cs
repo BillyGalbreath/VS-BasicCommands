@@ -16,11 +16,11 @@ namespace BasicCommands.Command {
                 .WithDescription(Lang.Get($"{cmd.name}-description"))
                 .RequiresPrivilege($"basiccommands.{cmd.name}")
                 .HandleWith(args => {
-                    BasicPlayer player = BasicPlayer.Get(args.Caller.Player);
-                    if (player == null) {
+                    BasicPlayer sender = BasicPlayer.Get(args.Caller.Player);
+                    if (sender == null) {
                         return TextCommandResult.Error(Lang.Get("player-only-command"), "0x0001");
                     }
-                    return Execute(player, args);
+                    return Execute(sender, args);
                 });
             if (cmd.aliases != null && cmd.aliases.Length > 0) {
                 chatCmd.WithAlias(cmd.aliases);
@@ -30,6 +30,6 @@ namespace BasicCommands.Command {
             }
         }
 
-        public abstract TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args);
+        public abstract TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args);
     }
 }

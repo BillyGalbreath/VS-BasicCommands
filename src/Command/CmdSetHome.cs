@@ -6,7 +6,7 @@ namespace BasicCommands.Command {
     public class CmdSetHome : AbstractCommand {
         public CmdSetHome() : base(new WordArgParser("name", true)) { }
 
-        public override TextCommandResult Execute(BasicPlayer player, TextCommandCallingArgs args) {
+        public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
             if (args.Parsers[0].IsMissing) {
                 return TextCommandResult.Success(Lang.Get("must-specify-home"));
             }
@@ -16,7 +16,7 @@ namespace BasicCommands.Command {
                 return TextCommandResult.Success(Lang.Get("invalid-home-name"));
             }
 
-            player.AddHome(name, player.CurPos);
+            sender.AddHome(name, sender.CurPos);
 
             return TextCommandResult.Success(Lang.Get("sethome-success", name));
         }
