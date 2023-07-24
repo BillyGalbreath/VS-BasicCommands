@@ -1,4 +1,5 @@
-﻿using ProtoBuf;
+﻿using BasicCommands.TeleportRequest;
+using ProtoBuf;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -22,8 +23,19 @@ public class BasicPlayer {
         return players.GetOrAdd(player.PlayerUID, k => new BasicPlayer(player));
     }
 
-    public static void Remove(IServerPlayer player) {
-        Get(player).Save().Remove();
+    public static void Remove(IServerPlayer serverPlayer) {
+        BasicPlayer player = Get(serverPlayer);
+        TpRequest pending = TpRequest.GetPendingForSender(player);
+        if (pending != null) {
+            pending.Remove();
+            pending.Message("cancelled");
+        }
+        pending = TpRequest.GetPendingForTarget(player);
+        if (pending != null) {
+            pending.Remove();
+            pending.Message("expired");
+        }
+        player.Save().Remove();
     }
 
     public static void SaveAllPlayers() {

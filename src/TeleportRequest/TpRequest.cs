@@ -20,24 +20,12 @@ public abstract class TpRequest {
         return GetPendingForSender(sender) != null;
     }
 
-    public static TpRequest RemovePendingForSender(BasicPlayer sender) {
-        TpRequest pending = GetPendingForSender(sender);
-        pending?.Remove();
-        return pending;
-    }
-
     public static TpRequest GetPendingForTarget(BasicPlayer target) {
         return requests.Keys.Where(request => request.target == target).FirstOrDefault();
     }
 
     public static bool HasPendingForTarget(BasicPlayer target) {
         return GetPendingForSender(target) != null;
-    }
-
-    public static TpRequest RemovePendingForTarget(BasicPlayer target) {
-        TpRequest pending = GetPendingForTarget(target);
-        pending?.Remove();
-        return pending;
     }
 
     public BasicPlayer sender;
@@ -66,5 +54,10 @@ public abstract class TpRequest {
         BasicCommandsMod.Instance().API.Event.UnregisterCallback(task);
     }
 
-    public abstract void Accept();
+    public void Accept() {
+        Teleport();
+        Remove();
+    }
+
+    protected abstract void Teleport();
 }

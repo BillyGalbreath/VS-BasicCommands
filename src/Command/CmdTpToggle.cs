@@ -12,7 +12,11 @@ public class CmdTpToggle : AbstractCommand {
         bool enabled = args.Parsers[0].IsMissing ? !sender.AllowTeleportRequests : (bool)args[0];
 
         if (!enabled) {
-            TpRequest.RemovePendingForTarget(sender)?.Message("denied");
+            TpRequest pending = TpRequest.GetPendingForTarget(sender);
+            if (pending != null) {
+                pending.Remove();
+                pending.Message("denied");
+            }
         }
 
         return TextCommandResult.Success(Lang.Get("tptoggle-success", enabled ? Lang.Get("on") : Lang.Get("off")));
