@@ -130,7 +130,21 @@ public class BasicPlayer {
 
     private BasicPlayer Load() {
         byte[] raw = player.WorldData.GetModdata(DATA_KEY);
-        data = raw == null ? new Data() : SerializerUtil.Deserialize<Data>(raw);
+        if (raw != null) {
+            try {
+                data = SerializerUtil.Deserialize<Data>(raw);
+            } catch (Exception) {
+                DataOldFormat old = raw == null ? new DataOldFormat() : SerializerUtil.Deserialize<DataOldFormat>(raw);
+                data = new Data {
+                    lastPos = new Vec3d(old.lastPos.X, old.lastPos.Y, old.lastPos.Z)
+                };
+                foreach (var (name, pos) in old.homes) {
+                    data.homes.Add(name, new Vec3d(pos.X, pos.Y, pos.Z));
+                }
+            }
+        } else {
+            data = new Data();
+        }
         return this;
     }
 
@@ -169,7 +183,13 @@ public class BasicPlayer {
     private class Data {
         internal Vec3d lastPos;
         internal Dictionary<string, Vec3d> homes = new();
-        internal Dictionary<string, Vec3d> teleportRequests = new();
+        internal bool allowTeleportRequests = true;
+    }
+
+    [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
+    private class DataOldFormat {
+        internal Vec3i lastPos;
+        internal Dictionary<string, Vec3i> homes = new();
         internal bool allowTeleportRequests = true;
     }
 }
