@@ -1,4 +1,5 @@
-﻿using BasicCommands.Configuration;
+﻿using BasicCommands.Command.Parser;
+using BasicCommands.Configuration;
 using BasicCommands.Player;
 using BasicCommands.TeleportRequest;
 using Vintagestory.API.Common;
@@ -6,7 +7,7 @@ using Vintagestory.API.Common;
 namespace BasicCommands.Command;
 
 public class CmdTpa : AbstractCommand {
-    public CmdTpa() : base(new OnlinePlayerArgParser("target", BasicCommandsMod.Instance().API, true)) { }
+    public CmdTpa() : base(new CaseInsensitiveAndImpartialOnlinePlayerArgParser("target", BasicCommandsMod.Instance().API, true)) { }
 
     public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         BasicPlayer target = BasicPlayer.Get((IPlayer)args[0]);
