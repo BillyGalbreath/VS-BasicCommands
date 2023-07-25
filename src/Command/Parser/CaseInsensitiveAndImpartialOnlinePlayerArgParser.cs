@@ -1,5 +1,6 @@
 ﻿using BasicCommands.Configuration;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
 
@@ -15,7 +16,7 @@ public class CaseInsensitiveAndImpartialOnlinePlayerArgParser : OnlinePlayerArgP
             return EnumParseResult.Bad;
         }
 
-        System.Collections.Generic.IEnumerable<IPlayer> online = api.World.AllOnlinePlayers.Where(player => player.PlayerName.ToLower().StartsWith(playername));
+        IEnumerable<IPlayer> online = api.World.AllOnlinePlayers.Where(player => player.PlayerName.ToLower().StartsWith(playername));
         if (online.Count() > 1) {
             lastErrorMessage = Lang.Get("More than one player matches that name");
             return EnumParseResult.Bad;
