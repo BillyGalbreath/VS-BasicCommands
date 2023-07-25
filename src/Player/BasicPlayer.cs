@@ -61,14 +61,14 @@ public class BasicPlayer {
         private set { }
     }
 
-    public Vec3i CurPos {
+    public Vec3d CurPos {
         get {
-            return player.Entity.Pos.XYZInt;
+            return player.Entity.Pos.XYZ;
         }
         private set { }
     }
 
-    public Vec3i LastPos {
+    public Vec3d LastPos {
         get {
             return data.lastPos;
         }
@@ -94,11 +94,11 @@ public class BasicPlayer {
         return data.homes.Keys;
     }
 
-    public Vec3i GetHome(string name) {
+    public Vec3d GetHome(string name) {
         return data.homes.Get(name);
     }
 
-    public void AddHome(string name, Vec3i pos) {
+    public void AddHome(string name, Vec3d pos) {
         bool changed = !pos.Equals(data.homes.Get(name));
         data.homes.Add(name, pos);
         dirty |= changed;
@@ -116,12 +116,12 @@ public class BasicPlayer {
         }
     }
 
-    public void TeleportTo(Vec3i pos) {
+    public void TeleportTo(Vec3d pos) {
         if (pos == null) {
             throw new ArgumentNullException(nameof(pos), "Cannot teleport to null!");
         }
         UpdateLastPosition();
-        player.Entity.TeleportTo(new Vec3d(pos.X + 0.5F, pos.Y, pos.Z + 0.5F));
+        player.Entity.TeleportTo(new Vec3d((int)pos.X + 0.5F, Math.Round(pos.Y, MidpointRounding.ToPositiveInfinity), (int)pos.Z + 0.5F));
     }
 
     public void UpdateLastPosition() {
@@ -167,9 +167,9 @@ public class BasicPlayer {
 
     [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
     private class Data {
-        internal Vec3i lastPos;
-        internal Dictionary<string, Vec3i> homes = new();
-        internal Dictionary<string, Vec3i> teleportRequests = new();
+        internal Vec3d lastPos;
+        internal Dictionary<string, Vec3d> homes = new();
+        internal Dictionary<string, Vec3d> teleportRequests = new();
         internal bool allowTeleportRequests = true;
     }
 }

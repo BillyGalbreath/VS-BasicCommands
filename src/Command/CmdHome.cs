@@ -22,7 +22,7 @@ public partial class CmdHome : AbstractCommand {
             return TextCommandResult.Success(Lang.Get("invalid-home-name"));
         }
 
-        Vec3i pos = sender.GetHome(name);
+        Vec3d pos = sender.GetHome(name);
         if (pos == null) {
             return TextCommandResult.Success(Lang.Get("home-doesnt-exist", name));
         }
