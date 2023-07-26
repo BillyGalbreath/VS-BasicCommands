@@ -5,6 +5,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
@@ -36,7 +37,8 @@ public class CmdTpr : AbstractCommand {
 
         worldManager.LoadChunkColumnPriority(chunk.X, chunk.Y, new ChunkLoadOptions() {
             OnLoaded = () => {
-                api.Logger.StoryEvent($"Y: {worldManager.GetSurfacePosY(randX, randZ)}");
+                pending.Remove(sender.UID);
+                api.Logger.Event($"Y: {worldManager.GetSurfacePosY(randX, randZ)}");
                 //ProcessWaitingChunk(chunk);
             }
         });
