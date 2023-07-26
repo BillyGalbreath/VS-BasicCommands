@@ -23,12 +23,15 @@ public class CmdTpr : AbstractCommand {
 
         int apothemX = worldManager.MapSizeX / 2;
         int apothemZ = worldManager.MapSizeZ / 2;
+        int chunkSize = worldManager.ChunkSize;
 
         Random rand = Random.Shared;
         int randX = rand.Next(-apothemX, apothemX);
         int randZ = rand.Next(-apothemZ, apothemZ);
 
-        pending.TryAdd(sender.UID, new Vec2i(randX, randZ));
+        worldManager.LoadChunkColumnPriority(randX / chunkSize, randZ / chunkSize);
+
+        pending.TryAdd(sender.UID, new(randX, randZ));
 
         return TextCommandResult.Success(Lang.Get("tpr-wait"));
     }
