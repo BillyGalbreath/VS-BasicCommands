@@ -26,7 +26,6 @@ public class BasicPlayerArgParser : ArgumentParserBase {
     }
 
     public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults> onReady = null) {
-        args.
         string arg = args.RawArgs.PopWord()?.ToLower();
         if (arg == null) {
             lastErrorMessage = Lang.Get("Argument is missing");
