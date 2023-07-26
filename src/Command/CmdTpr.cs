@@ -34,7 +34,12 @@ public class CmdTpr : AbstractCommand {
 
         Vec2i chunk = new(randX / chunkSize, randZ / chunkSize);
 
-        worldManager.LoadChunkColumnPriority(chunk.X, chunk.Y, new ChunkLoadOptions() { OnLoaded = () => { ProcessWaitingChunk(chunk); } });
+        worldManager.LoadChunkColumnPriority(chunk.X, chunk.Y, new ChunkLoadOptions() {
+            OnLoaded = () => {
+                api.Logger.StoryEvent($"Y: {worldManager.GetSurfacePosY(randX, randZ)}");
+                //ProcessWaitingChunk(chunk);
+            }
+        });
 
         pending.TryAdd(sender.UID, new(randX, randZ));
 
@@ -45,7 +50,6 @@ public class CmdTpr : AbstractCommand {
         ICoreServerAPI api = BasicCommandsMod.Instance().API;
         api.Logger.Event($"Chunk loaded: {chunk}");
         IWorldManagerAPI worldManager = api.WorldManager;
-        IBlockAccessor blockAccessor = api.World.BlockAccessor;
         for (int i = pending.Count - 1; i >= 0; i--) {
             KeyValuePair<string, Vec2i> entry = pending.ElementAt(i);
             Vec2i block = entry.Value;
