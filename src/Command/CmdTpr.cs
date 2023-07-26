@@ -32,7 +32,9 @@ public class CmdTpr : AbstractCommand {
 
         api.Logger.StoryEvent($"aX: {apothemX} aZ: {apothemZ} cS: {chunkSize} rX: {randX} rZ: {randZ}");
 
-        worldManager.LoadChunkColumnPriority(randX / chunkSize, randZ / chunkSize);
+        Vec2i chunk = new(randX / chunkSize, randZ / chunkSize);
+
+        worldManager.LoadChunkColumnPriority(chunk.X, chunk.Y, new ChunkLoadOptions() { OnLoaded = () => { ProcessWaitingChunk(chunk); } });
 
         pending.TryAdd(sender.UID, new(randX, randZ));
 
