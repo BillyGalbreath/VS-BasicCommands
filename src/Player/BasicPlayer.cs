@@ -15,6 +15,10 @@ public class BasicPlayer {
     private static readonly ConcurrentDictionary<string, BasicPlayer> players = new();
     private static readonly string DATA_KEY = "BasicCommands";
 
+    public static IEnumerable<BasicPlayer> GetAll() {
+        return players.Values;
+    }
+
     public static BasicPlayer Get(IPlayer player) {
         return player is IServerPlayer sPlayer ? Get(sPlayer) : null;
     }

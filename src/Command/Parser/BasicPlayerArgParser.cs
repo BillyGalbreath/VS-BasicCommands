@@ -1,4 +1,5 @@
 ﻿using BasicCommands.Configuration;
+using BasicCommands.Player;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,17 +7,33 @@ using Vintagestory.API.Common;
 
 namespace BasicCommands.Command.Parser;
 
-public class CaseInsensitiveAndImpartialOnlinePlayerArgParser : OnlinePlayerArgParser {
-    public CaseInsensitiveAndImpartialOnlinePlayerArgParser(string argName, ICoreAPI api, bool isMandatoryArg) : base(argName, api, isMandatoryArg) { }
+public class BasicPlayerArgParser : ArgumentParserBase {
+    protected BasicPlayer player;
+
+    public BasicPlayerArgParser(string argName) : this(argName, true) { }
+    public BasicPlayerArgParser(string argName, bool isMandatoryArg) : base(argName, isMandatoryArg) { }
+
+    public override string[] GetValidRange(CmdArgs args) {
+        return BasicPlayer.GetAll().Select(player => player.Name).ToArray();
+    }
+
+    public override BasicPlayer GetValue() {
+        return player;
+    }
+
+    public override void SetValue(object data) {
+        player = (BasicPlayer)data;
+    }
 
     public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults> onReady = null) {
-        string playername = args.RawArgs.PopWord()?.ToLower();
-        if (playername == null) {
+        args.
+        string arg = args.RawArgs.PopWord()?.ToLower();
+        if (arg == null) {
             lastErrorMessage = Lang.Get("Argument is missing");
             return EnumParseResult.Bad;
         }
 
-        IEnumerable<IPlayer> online = api.World.AllOnlinePlayers.Where(player => player.PlayerName.ToLower().StartsWith(playername));
+        IEnumerable<BasicPlayer> online = BasicPlayer.GetAll().Where(player => player.Name.ToLower().StartsWith(arg));
         if (online.Count() > 1) {
             lastErrorMessage = Lang.Get("More than one player matches that name");
             return EnumParseResult.Bad;
