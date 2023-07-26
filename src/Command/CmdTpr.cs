@@ -59,10 +59,8 @@ public class CmdTpr : AbstractCommand {
                 api.Logger.Event("Null player");
                 continue;
             }
-            Vec3d pos = new(block.X, 1, block.Y);
-            api.Logger.Event($"Pos1: {pos}");
-            pos.Y = blockAccessor.GetTerrainMapheightAt(pos.AsBlockPos) + 1;
-            api.Logger.Event($"Pos2: {pos}");
+            Vec3d pos = new(block.X, (worldManager.GetSurfacePosY(block.X, block.Y) ?? 0) + 1, block.Y);
+            api.Logger.Event($"Pos: {pos}");
             player.TeleportTo(pos);
             player.SendMessage(Lang.Get("tpr-success", (int)pos.X, (int)pos.Y, (int)pos.Z));
         }
