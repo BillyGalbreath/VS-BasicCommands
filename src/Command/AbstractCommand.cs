@@ -15,14 +15,9 @@ public abstract class AbstractCommand {
         IChatCommand chatCmd = mod.API.ChatCommands
             .Create(cmd.name)
             .WithDescription(Lang.Get($"{cmd.name}-description"))
+            .RequiresPlayer()
             .RequiresPrivilege($"basiccommands.{cmd.name}")
-            .HandleWith(args => {
-                BasicPlayer sender = BasicPlayer.Get(args.Caller.Player);
-                if (sender == null) {
-                    return TextCommandResult.Error(Lang.Get("player-only-command"), "0x0001");
-                }
-                return Execute(sender, args);
-            });
+            .HandleWith(args => Execute(BasicPlayer.Get(args.Caller.Player), args));
         if (cmd.aliases != null && cmd.aliases.Length > 0) {
             chatCmd.WithAlias(cmd.aliases);
         }
