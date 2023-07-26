@@ -15,11 +15,12 @@ public class CmdTpr : AbstractCommand {
     private static readonly ConcurrentDictionary<string, Vec2i> pending = new();
 
     public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
-        if (pending.ContainsKey(sender.Name)) {
+        if (pending.ContainsKey(sender.UID)) {
             return TextCommandResult.Success(Lang.Get("tpr-already-waiting"));
         }
 
-        IWorldManagerAPI worldManager = BasicCommandsMod.Instance().API.WorldManager;
+        ICoreServerAPI api = BasicCommandsMod.Instance().API;
+        IWorldManagerAPI worldManager = api.WorldManager;
 
         int apothemX = worldManager.MapSizeX / 2;
         int apothemZ = worldManager.MapSizeZ / 2;
@@ -28,6 +29,8 @@ public class CmdTpr : AbstractCommand {
         Random rand = Random.Shared;
         int randX = rand.Next(-apothemX, apothemX);
         int randZ = rand.Next(-apothemZ, apothemZ);
+
+        api.Logger.StoryEvent($"aX: {apothemX} aZ: {apothemZ} cS: {chunkSize} rX: {randX} rZ: {randZ}");
 
         worldManager.LoadChunkColumnPriority(randX / chunkSize, randZ / chunkSize);
 
