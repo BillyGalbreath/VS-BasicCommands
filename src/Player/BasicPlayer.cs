@@ -19,6 +19,10 @@ public class BasicPlayer {
         return players.Values;
     }
 
+    public static BasicPlayer Get(string uid) {
+        return Get(BasicCommandsMod.Instance().API.World.PlayerByUid(uid));
+    }
+
     public static BasicPlayer Get(IPlayer player) {
         return player is IServerPlayer sPlayer ? Get(sPlayer) : null;
     }
@@ -61,6 +65,13 @@ public class BasicPlayer {
     public string Name {
         get {
             return player.PlayerName;
+        }
+        private set { }
+    }
+
+    public string UID {
+        get {
+            return player.PlayerUID;
         }
         private set { }
     }

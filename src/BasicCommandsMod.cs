@@ -36,7 +36,7 @@ public class BasicCommandsMod : ModSystem {
 
         api.Event.GameWorldSave += OnGameWorldSave;
 
-        _ = new PlayerListener();
+        _ = new EventListener();
 
         _ = new CmdBack();
         _ = new CmdDelHome();
