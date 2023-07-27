@@ -10,7 +10,7 @@ public class CmdTpa : AbstractCommand {
     public CmdTpa() : base(new BasicPlayerArgParser("target")) { }
 
     public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
-        BasicPlayer target = BasicPlayer.Get((IPlayer)args[0]);
+        BasicPlayer target = (BasicPlayer)args[0];
         if (target == null) {
             return TextCommandResult.Success(Lang.Get("player-not-found"));
         }
