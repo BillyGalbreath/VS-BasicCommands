@@ -31,14 +31,11 @@ public class CmdTpr : AbstractCommand {
         int randX = rand.Next(-apothemX, apothemX);
         int randZ = rand.Next(-apothemZ, apothemZ);
 
-        api.Logger.StoryEvent($"aX: {apothemX} aZ: {apothemZ} cS: {chunkSize} rX: {randX} rZ: {randZ}");
-
-        Vec2i chunk = new(randX / chunkSize, randZ / chunkSize);
-
-        worldManager.LoadChunkColumnPriority(chunk.X, chunk.Y, new ChunkLoadOptions() {
+        worldManager.LoadChunkColumnPriority(randX / chunkSize, randZ / chunkSize, new ChunkLoadOptions() {
             OnLoaded = () => {
                 pending.Remove(sender.UID);
-                api.Logger.Event($"Y: {worldManager.GetSurfacePosY(randX, randZ)}");
+                api.Logger.Event($"{randX}, {worldManager.GetSurfacePosY(randX, randZ)}, {randZ}");
+                api.Logger.Event($"aX: {apothemX} aZ: {apothemZ} cS: {chunkSize} rX: {randX} rZ: {randZ}");
                 //ProcessWaitingChunk(chunk);
             }
         });
