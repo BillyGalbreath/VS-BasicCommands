@@ -1,13 +1,15 @@
 ﻿{
   "type": "code",
-  "side": "Server",
-  "modid": "basiccommands",
   "name": "BasicCommands",
-  "author": "BillyGalbreath",
-  "description": "Basic commands for Vintage Story servers",
+  "modid": "basiccommands",
   "version": "0.0.1",
+  "description": "Basic commands for Vintage Story servers",
+  "website": "https://github.com/BillyGalbreath/VS-BasicCommands",
+  "authors": [ "BillyGalbreath" ],
+  "side": "Server",
+  "requiredOnClient": false,
+  "requiredOnServer": true,
   "dependency": {
-    "game": ""
-  },
-  "website": "https://github.com/BillyGalbreath/VS-BasicCommands"
+    "game": "1.18.0"
+  }
 }
