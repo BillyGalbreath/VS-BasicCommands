@@ -22,15 +22,15 @@ public class EventListener {
     }
 
     private void OnPlayerCreate(IServerPlayer player) {
-        BasicPlayer.Get(player);
+        BasicPlayer.Get(player).IsOnline = true;
     }
 
     private void OnPlayerJoin(IServerPlayer player) {
-        BasicPlayer.Get(player);
+        BasicPlayer.Get(player).IsOnline = true;
     }
 
     private void OnPlayerDisconnect(IServerPlayer player) {
-        BasicPlayer.Remove(player);
+        BasicPlayer.Remove(player).IsOnline = false;
     }
 
     private void OnPlayerDeath(IServerPlayer player, DamageSource damageSource) {

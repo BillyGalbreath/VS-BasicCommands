@@ -34,6 +34,7 @@
   "teleport-request-disabled": "<font color=\"#7C0A02\">{0} has teleport requests disabled.</font>",
   "teleport-request-nothing-pending": "<font color=\"#7C0A02\">You have to pending teleport requests.</font>",
   "teleport-request-self-not-allowed": "<font color=\"#7C0A02\">You cannot teleport request yourself.</font>",
+  "teleport-request-target-offline": "<font color=\"#7C0A02\">Target is no longer online.</font>",
 
   "teleport-request-accepted-sender": "<font color=\"#027c0a\">Pending teleport request to {0} has been accepted.</font>",
   "teleport-request-accepted-target": "<font color=\"#027c0a\">Pending teleport request from {0} has been accepted.</font>",

@@ -31,7 +31,7 @@ public class BasicPlayer {
         return players.GetOrAdd(player.PlayerUID, k => new BasicPlayer(player));
     }
 
-    public static void Remove(IServerPlayer serverPlayer) {
+    public static BasicPlayer Remove(IServerPlayer serverPlayer) {
         BasicPlayer player = Get(serverPlayer);
         TpRequest pending = TpRequest.GetPendingForSender(player);
         if (pending != null) {
@@ -44,6 +44,7 @@ public class BasicPlayer {
             pending.Message("expired");
         }
         player.Save().Remove();
+        return player;
     }
 
     public static void SaveAllPlayers() {
@@ -61,6 +62,8 @@ public class BasicPlayer {
         this.player = player;
         Load();
     }
+
+    public bool IsOnline { get; set; }
 
     public string Name {
         get {

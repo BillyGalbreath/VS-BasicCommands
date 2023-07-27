@@ -55,7 +55,11 @@ public abstract class TpRequest {
     }
 
     public void Accept() {
-        Teleport();
+        if (target.IsOnline) {
+            Teleport();
+        } else {
+            sender.SendMessage(Lang.Get($"teleport-request-target-offline", target.Name));
+        }
         Remove();
     }
 

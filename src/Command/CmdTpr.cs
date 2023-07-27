@@ -28,9 +28,11 @@ public class CmdTpr : AbstractCommand {
         worldManager.LoadChunkColumnPriority(randX / chunkSize, randZ / chunkSize, new ChunkLoadOptions() {
             OnLoaded = () => {
                 pending.Remove(sender.UID);
-                int topY = (worldManager.GetSurfacePosY(randX, randZ) ?? 0) + 1;
-                sender.TeleportTo(new(randX, topY, randZ));
-                sender.SendMessage(Lang.Get("tpr-success", randX, topY, randZ));
+                if (sender.IsOnline) {
+                    int topY = (worldManager.GetSurfacePosY(randX, randZ) ?? 0) + 1;
+                    sender.TeleportTo(new(randX, topY, randZ));
+                    sender.SendMessage(Lang.Get("tpr-success", randX, topY, randZ));
+                }
             }
         });
 
