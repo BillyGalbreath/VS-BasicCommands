@@ -42,8 +42,11 @@ public class BasicCommandsMod : ModSystem {
         _ = new CmdDelHome();
         _ = new CmdHome();
         _ = new CmdHomes();
+        _ = new CmdJump();
         _ = new CmdSetHome();
+        _ = new CmdSetSpawn();
         _ = new CmdSpawn();
+        _ = new CmdTop();
         _ = new CmdTpa();
         _ = new CmdTpAccept();
         _ = new CmdTpaHere();

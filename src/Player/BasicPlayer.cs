@@ -3,7 +3,9 @@ using ProtoBuf;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
@@ -79,9 +81,9 @@ public class BasicPlayer {
         private set { }
     }
 
-    public Vec3d CurPos {
+    public EntityPos EntityPos {
         get {
-            return player.Entity.Pos.XYZ;
+            return player.Entity.Pos;
         }
         private set { }
     }
@@ -95,6 +97,23 @@ public class BasicPlayer {
             data.lastPos = value;
             dirty |= changed;
         }
+    }
+
+    public BlockSelection TargetBlock {
+        get {
+            BlockSelection blockSelection = new();
+            EntitySelection entitySelection = new();
+            BasicCommandsMod.Instance().API.World.RayTraceForSelection(
+                player.Entity.Pos.XYZ.Add(player.Entity.LocalEyePos),
+                player.Entity.SidedPos.Pitch,
+                player.Entity.SidedPos.Yaw,
+                player.WorldData.LastApprovedViewDistance,
+                ref blockSelection,
+                ref entitySelection
+            );
+            return blockSelection;
+        }
+        private set { }
     }
 
     public bool AllowTeleportRequests {
@@ -143,7 +162,7 @@ public class BasicPlayer {
     }
 
     public void UpdateLastPosition() {
-        LastPos = CurPos;
+        LastPos = EntityPos.XYZ;
     }
 
     private BasicPlayer Load() {

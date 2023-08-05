@@ -17,7 +17,7 @@ public class CmdSetHome : AbstractCommand {
             return TextCommandResult.Success(Lang.Get("invalid-home-name"));
         }
 
-        sender.AddHome(name, sender.CurPos);
+        sender.AddHome(name, sender.EntityPos.XYZ);
 
         return TextCommandResult.Success(Lang.Get("sethome-success", name));
     }

@@ -6,6 +6,6 @@ public class TpaRequest : TpRequest {
     public TpaRequest(BasicPlayer sender, BasicPlayer target) : base(sender, target) { }
 
     protected override void Teleport() {
-        sender.TeleportTo(target.CurPos);
+        sender.TeleportTo(target.EntityPos.XYZ);
     }
 }
