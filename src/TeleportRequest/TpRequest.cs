@@ -1,43 +1,43 @@
-﻿using BasicCommands.Configuration;
-using BasicCommands.Player;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Linq;
+using BasicCommands.Configuration;
+using BasicCommands.Player;
 
 namespace BasicCommands.TeleportRequest;
 
 public abstract class TpRequest {
-    public static readonly ConcurrentDictionary<TpRequest, bool> requests = new();
+    private static readonly ConcurrentDictionary<TpRequest, bool> REQUESTS = new();
 
     public static void Add(TpRequest request) {
-        requests.TryAdd(request, true);
+        REQUESTS.TryAdd(request, true);
     }
 
-    public static TpRequest GetPendingForSender(BasicPlayer sender) {
-        return requests.Keys.Where(request => request.sender == sender).FirstOrDefault();
+    public static TpRequest? GetPendingForSender(BasicPlayer sender) {
+        return REQUESTS.Keys.FirstOrDefault(request => request.sender.Equals(sender));
     }
 
     public static bool HasPendingForSender(BasicPlayer sender) {
         return GetPendingForSender(sender) != null;
     }
 
-    public static TpRequest GetPendingForTarget(BasicPlayer target) {
-        return requests.Keys.Where(request => request.target == target).FirstOrDefault();
+    public static TpRequest? GetPendingForTarget(BasicPlayer target) {
+        return REQUESTS.Keys.FirstOrDefault(request => request.target.Equals(target));
     }
 
     public static bool HasPendingForTarget(BasicPlayer target) {
         return GetPendingForSender(target) != null;
     }
 
-    public BasicPlayer sender;
-    public BasicPlayer target;
+    protected readonly BasicPlayer sender;
+    protected readonly BasicPlayer target;
 
     private readonly long task;
 
-    public TpRequest(BasicPlayer sender, BasicPlayer target) {
+    protected TpRequest(BasicPlayer sender, BasicPlayer target) {
         this.sender = sender;
         this.target = target;
 
-        task = BasicCommandsMod.Instance().API.Event.RegisterCallback(delta => {
+        task = sender.Player.Entity.World.Api.Event.RegisterCallback(_ => {
             Message("expired");
             Remove();
         }, 30000);
@@ -50,16 +50,18 @@ public abstract class TpRequest {
     }
 
     public void Remove() {
-        requests.TryRemove(this, out var _);
-        BasicCommandsMod.Instance().API.Event.UnregisterCallback(task);
+        REQUESTS.TryRemove(this, out bool _);
+        sender.Player.Entity.World.Api.Event.UnregisterCallback(task);
     }
 
     public void Accept() {
         if (target.IsOnline) {
             Teleport();
-        } else {
-            sender.SendMessage(Lang.Get($"teleport-request-target-offline", target.Name));
         }
+        else {
+            sender.SendMessage(Lang.Get("teleport-request-target-offline", target.Name));
+        }
+
         Remove();
     }
 

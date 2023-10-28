@@ -3,13 +3,14 @@ using BasicCommands.Configuration;
 using BasicCommands.Player;
 using BasicCommands.TeleportRequest;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace BasicCommands.Command;
 
 public class CmdTpa : AbstractCommand {
-    public CmdTpa() : base(new BasicPlayerArgParser("target")) { }
+    public CmdTpa(ICoreServerAPI api, Config config) : base(api, config, new BasicPlayerArgParser("target")) { }
 
-    public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         BasicPlayer target = (BasicPlayer)args[0];
         if (target == null) {
             return TextCommandResult.Success(Lang.Get("player-not-found"));
@@ -36,7 +37,7 @@ public class CmdTpa : AbstractCommand {
         return TextCommandResult.Success();
     }
 
-    public virtual TpRequest Create(BasicPlayer sender, BasicPlayer target) {
+    protected virtual TpRequest Create(BasicPlayer sender, BasicPlayer target) {
         return new TpaRequest(sender, target).Message("ask");
     }
 }

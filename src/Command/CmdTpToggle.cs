@@ -2,23 +2,20 @@
 using BasicCommands.Player;
 using BasicCommands.TeleportRequest;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace BasicCommands.Command;
 
 public class CmdTpToggle : AbstractCommand {
-    public CmdTpToggle() : base(new BoolArgParser("on|off", "enable", false)) { }
+    public CmdTpToggle(ICoreServerAPI api, Config config) : base(api, config, new BoolArgParser("on|off", "enable", false)) { }
 
-    public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
-        bool enabled = args.Parsers[0].IsMissing ? !sender.AllowTeleportRequests : (bool)args[0];
+    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+        sender.AllowTeleportRequests = args.Parsers[0].IsMissing ? !sender.AllowTeleportRequests : (bool)args[0];
 
-        if (!enabled) {
-            TpRequest pending = TpRequest.GetPendingForTarget(sender);
-            if (pending != null) {
-                pending.Remove();
-                pending.Message("denied");
-            }
+        if (!sender.AllowTeleportRequests) {
+            TpRequest.GetPendingForTarget(sender)?.Message("denied").Remove();
         }
 
-        return TextCommandResult.Success(Lang.Get("tptoggle-success", enabled ? Lang.Get("on") : Lang.Get("off")));
+        return TextCommandResult.Success(Lang.Get("tptoggle-success", sender.AllowTeleportRequests ? Lang.Get("on") : Lang.Get("off")));
     }
 }

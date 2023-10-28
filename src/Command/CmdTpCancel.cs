@@ -2,17 +2,21 @@
 using BasicCommands.Player;
 using BasicCommands.TeleportRequest;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace BasicCommands.Command;
 
 public class CmdTpCancel : AbstractCommand {
-    public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
-        TpRequest request = TpRequest.GetPendingForSender(sender);
+    public CmdTpCancel(ICoreServerAPI api, Config config) : base(api, config) { }
+
+    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+        TpRequest? request = TpRequest.GetPendingForSender(sender);
         if (request == null) {
             return TextCommandResult.Success(Lang.Get("teleport-request-nothing-pending"));
         }
-        request.Remove();
-        request.Message("cancelled");
+
+        request.Message("cancelled").Remove();
+
         return TextCommandResult.Success();
     }
 }

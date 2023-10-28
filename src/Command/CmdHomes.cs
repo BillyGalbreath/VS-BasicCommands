@@ -1,15 +1,19 @@
-﻿using BasicCommands.Configuration;
+﻿using System.Linq;
+using BasicCommands.Configuration;
 using BasicCommands.Player;
-using System.Collections.Generic;
-using System.Linq;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace BasicCommands.Command;
 
 public class CmdHomes : AbstractCommand {
-    public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
-        IEnumerable<string> homes = sender.ListHomes();
-        if (homes == null || !homes.Any()) {
+    public CmdHomes(ICoreServerAPI api, Config config) : base(api, config) { }
+
+    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+        string[] homes = sender.ListHomes().ToArray();
+
+        // ReSharper disable once ConvertIfStatementToReturnStatement
+        if (homes.Length == 0) {
             return TextCommandResult.Success(Lang.Get("no-homes-set"));
         }
 

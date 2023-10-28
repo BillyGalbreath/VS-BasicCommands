@@ -7,10 +7,12 @@ using Vintagestory.API.Server;
 namespace BasicCommands.Command;
 
 public class CmdTop : AbstractCommand {
-    public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    public CmdTop(ICoreServerAPI api, Config config) : base(api, config) { }
+
+    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         Vec3d pos = sender.EntityPos.XYZ.Clone();
 
-        pos.Y = BasicCommandsMod.Instance().API.WorldManager.GetSurfacePosY(pos.XInt, pos.ZInt) ?? -1;
+        pos.Y = api.WorldManager.GetSurfacePosY(pos.XInt, pos.ZInt) ?? -1;
 
         if (pos.Y < 0) {
             return TextCommandResult.Error(Lang.Get("top-failed"));

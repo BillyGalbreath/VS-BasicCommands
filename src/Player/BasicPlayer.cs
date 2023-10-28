@@ -1,9 +1,9 @@
-﻿using BasicCommands.TeleportRequest;
-using ProtoBuf;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using Vintagestory.API.Client;
+using System.Diagnostics.CodeAnalysis;
+using BasicCommands.TeleportRequest;
+using ProtoBuf;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
@@ -14,112 +14,95 @@ using Vintagestory.API.Util;
 namespace BasicCommands.Player;
 
 public class BasicPlayer {
-    private static readonly ConcurrentDictionary<string, BasicPlayer> players = new();
-    private static readonly string DATA_KEY = "BasicCommands";
+    private static readonly ConcurrentDictionary<string, BasicPlayer> PLAYERS = new();
+
+    private const string DataKey = "BasicCommands";
 
     public static IEnumerable<BasicPlayer> GetAll() {
-        return players.Values;
+        return PLAYERS.Values;
     }
 
-    public static BasicPlayer Get(string uid) {
-        return Get(BasicCommandsMod.Instance().API.World.PlayerByUid(uid));
-    }
-
-    public static BasicPlayer Get(IPlayer player) {
+    public static BasicPlayer? Get(IPlayer player) {
         return player is IServerPlayer sPlayer ? Get(sPlayer) : null;
     }
 
     public static BasicPlayer Get(IServerPlayer player) {
-        return players.GetOrAdd(player.PlayerUID, k => new BasicPlayer(player));
+        return PLAYERS.GetOrAdd(player.PlayerUID, _ => new BasicPlayer(player));
     }
 
     public static BasicPlayer Remove(IServerPlayer serverPlayer) {
         BasicPlayer player = Get(serverPlayer);
-        TpRequest pending = TpRequest.GetPendingForSender(player);
-        if (pending != null) {
-            pending.Remove();
-            pending.Message("cancelled");
-        }
-        pending = TpRequest.GetPendingForTarget(player);
-        if (pending != null) {
-            pending.Remove();
-            pending.Message("expired");
-        }
+
+        TpRequest.GetPendingForSender(player)?.Message("cancelled").Remove();
+        TpRequest.GetPendingForTarget(player)?.Message("expired").Remove();
+
         player.Save().Remove();
+
         return player;
     }
 
     public static void SaveAllPlayers() {
-        foreach (BasicPlayer player in players.Values) {
+        foreach (BasicPlayer player in PLAYERS.Values) {
             player.Save();
         }
     }
 
-    private readonly IServerPlayer player;
-
-    private Data data;
+    private readonly Data data;
     private bool dirty;
 
     private BasicPlayer(IServerPlayer player) {
-        this.player = player;
-        Load();
+        Player = player;
+
+        byte[] raw = Player.WorldData.GetModdata(DataKey);
+        if (raw != null) {
+            try {
+                data = SerializerUtil.Deserialize<Data>(raw);
+            }
+            catch (Exception) {
+                // ignored
+            }
+        }
+
+        data ??= new Data();
     }
+
+    public IServerPlayer Player { get; }
 
     public bool IsOnline { get; set; }
 
-    public string Name {
-        get {
-            return player.PlayerName;
-        }
-        private set { }
-    }
+    public string Name => Player.PlayerName;
 
-    public string UID {
-        get {
-            return player.PlayerUID;
-        }
-        private set { }
-    }
+    public string Uid => Player.PlayerUID;
 
-    public EntityPos EntityPos {
-        get {
-            return player.Entity.Pos;
-        }
-        private set { }
-    }
+    public EntityPos EntityPos => Player.Entity.Pos;
 
-    public Vec3d LastPos {
-        get {
-            return data.lastPos;
-        }
-        set {
-            bool changed = !value.Equals(data.lastPos);
+    public Vec3d? LastPos {
+        get => data.lastPos;
+        private set {
+            bool changed = !Equals(value, data.lastPos);
             data.lastPos = value;
             dirty |= changed;
         }
     }
 
-    public BlockSelection TargetBlock {
+    public BlockSelection? TargetBlock {
         get {
             BlockSelection blockSelection = new();
             EntitySelection entitySelection = new();
-            BasicCommandsMod.Instance().API.World.RayTraceForSelection(
-                player.Entity.Pos.XYZ.Add(player.Entity.LocalEyePos),
-                player.Entity.SidedPos.Pitch,
-                player.Entity.SidedPos.Yaw,
-                player.WorldData.LastApprovedViewDistance,
+            Player.Entity.World.RayTraceForSelection(
+                Player.Entity.Pos.XYZ.Add(Player.Entity.LocalEyePos),
+                Player.Entity.SidedPos.Pitch,
+                Player.Entity.SidedPos.Yaw,
+                Player.WorldData.LastApprovedViewDistance,
                 ref blockSelection,
                 ref entitySelection
             );
             return blockSelection;
         }
-        private set { }
     }
 
     public bool AllowTeleportRequests {
-        get {
-            return data.allowTeleportRequests;
-        }
+        get => data.allowTeleportRequests;
         set {
             bool changed = data.allowTeleportRequests != value;
             data.allowTeleportRequests = value;
@@ -131,12 +114,12 @@ public class BasicPlayer {
         return data.homes.Keys;
     }
 
-    public Vec3d GetHome(string name) {
-        return data.homes.Get(name);
+    public Vec3d? GetHome(string name) {
+        return data.homes.GetValueOrDefault(name);
     }
 
     public void AddHome(string name, Vec3d pos) {
-        bool changed = !pos.Equals(data.homes.Get(name));
+        bool changed = !pos.Equals(GetHome(name));
         data.homes.Add(name, pos);
         dirty |= changed;
     }
@@ -147,86 +130,57 @@ public class BasicPlayer {
         return changed;
     }
 
-    public void SendMessage(string message) {
-        if (message != null && message.Length > 0) {
-            player.SendMessage(GlobalConstants.GeneralChatGroup, message, EnumChatType.CommandSuccess);
+    public void SendMessage(string? message) {
+        if (message is { Length: > 0 }) {
+            Player.SendMessage(GlobalConstants.GeneralChatGroup, message, EnumChatType.CommandSuccess);
         }
     }
 
-    public void TeleportTo(Vec3d pos) {
+    public void TeleportTo(Vec3d? pos) {
         if (pos == null) {
             throw new ArgumentNullException(nameof(pos), "Cannot teleport to null!");
         }
+
         UpdateLastPosition();
-        player.Entity.TeleportTo(new Vec3d((int)pos.X + 0.5F, Math.Round(pos.Y, MidpointRounding.ToPositiveInfinity), (int)pos.Z + 0.5F));
+        Player.Entity.TeleportTo(new Vec3d((int)pos.X + 0.5F, Math.Round(pos.Y, MidpointRounding.ToPositiveInfinity), (int)pos.Z + 0.5F));
     }
 
     public void UpdateLastPosition() {
         LastPos = EntityPos.XYZ;
     }
 
-    private BasicPlayer Load() {
-        byte[] raw = player.WorldData.GetModdata(DATA_KEY);
-        if (raw != null) {
-            try {
-                data = SerializerUtil.Deserialize<Data>(raw);
-            } catch (Exception) {
-                DataOldFormat old = raw == null ? new DataOldFormat() : SerializerUtil.Deserialize<DataOldFormat>(raw);
-                data = new Data {
-                    lastPos = new Vec3d(old.lastPos.X, old.lastPos.Y, old.lastPos.Z)
-                };
-                foreach (var (name, pos) in old.homes) {
-                    data.homes.Add(name, new Vec3d(pos.X, pos.Y, pos.Z));
-                }
-            }
-        } else {
-            data = new Data();
+    private BasicPlayer Save() {
+        if (!dirty) {
+            return this;
         }
+
+        dirty = false;
+        Player.WorldData.SetModdata(DataKey, SerializerUtil.Serialize(data));
+
         return this;
     }
 
-    public BasicPlayer Save() {
-        if (dirty) {
-            dirty = false;
-            byte[] raw = SerializerUtil.Serialize(data);
-            player.WorldData.SetModdata(DATA_KEY, raw);
-        }
-        return this;
+    private void Remove() {
+        PLAYERS.Remove(Player.PlayerUID);
     }
 
-    public BasicPlayer Remove() {
-        players.Remove(player.PlayerUID);
-        return this;
-    }
-
-    public override bool Equals(object obj) {
+    public override bool Equals(object? obj) {
         if (this == obj) {
             return true;
         }
-        if (obj == null) {
-            return false;
-        }
-        if (obj is not BasicPlayer other) {
-            return false;
-        }
-        return player.PlayerUID.Equals(other.player.PlayerUID);
+
+        return obj is BasicPlayer other && Player.PlayerUID.Equals(other.Player.PlayerUID);
     }
 
     public override int GetHashCode() {
-        return player.PlayerUID.GetHashCode();
+        return Player.PlayerUID.GetHashCode();
     }
 
     [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
+    [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Local")]
     private class Data {
-        internal Vec3d lastPos;
+        internal Vec3d? lastPos;
         internal Dictionary<string, Vec3d> homes = new();
-        internal bool allowTeleportRequests = true;
-    }
-
-    [ProtoContract(ImplicitFields = ImplicitFields.AllFields)]
-    private class DataOldFormat {
-        internal Vec3i lastPos;
-        internal Dictionary<string, Vec3i> homes = new();
         internal bool allowTeleportRequests = true;
     }
 }

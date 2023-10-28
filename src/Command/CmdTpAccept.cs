@@ -2,17 +2,21 @@
 using BasicCommands.Player;
 using BasicCommands.TeleportRequest;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace BasicCommands.Command;
 
 public class CmdTpAccept : AbstractCommand {
-    public override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
-        TpRequest request = TpRequest.GetPendingForTarget(sender);
+    public CmdTpAccept(ICoreServerAPI api, Config config) : base(api, config) { }
+
+    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+        TpRequest? request = TpRequest.GetPendingForTarget(sender);
         if (request == null) {
             return TextCommandResult.Success(Lang.Get("teleport-request-nothing-pending"));
         }
-        request.Accept();
-        request.Message("accepted");
+
+        request.Message("accepted").Accept();
+
         return TextCommandResult.Success();
     }
 }
