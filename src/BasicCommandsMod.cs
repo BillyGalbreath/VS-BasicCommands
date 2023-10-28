@@ -1,6 +1,9 @@
 ﻿using BasicCommands.Command;
 using BasicCommands.Configuration;
 using BasicCommands.Player;
+using System.Collections.Generic;
+using System.Text.Json;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
@@ -22,7 +25,19 @@ public class BasicCommandsMod : ModSystem {
     }
 
     public override bool ShouldLoad(EnumAppSide side) {
-        return side == EnumAppSide.Server;
+        return true;// side == EnumAppSide.Server;
+    }
+
+    public override void StartClientSide(ICoreClientAPI api) {
+        api.ChatCommands.Create("exportcolors")
+            .HandleWith(args => {
+                Dictionary<int, int> colors = new();
+                foreach (Block block in BasicCommandsMod.Instance().API.World.Blocks) {
+                    int color = api.BlockTextureAtlas.GetAverageColor(block.TextureSubIdForBlockColor) >> 2;
+                    colors.Add(block.BlockId, color);
+                }
+                return TextCommandResult.Success(JsonSerializer.Serialize(colors));
+            });
     }
 
     public override void StartServerSide(ICoreServerAPI api) {

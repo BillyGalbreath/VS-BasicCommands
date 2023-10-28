@@ -9,7 +9,7 @@
   "side": "Server",
   "requiredOnClient": false,
   "requiredOnServer": true,
-  "dependency": {
+  "dependencies": {
     "game": "1.18.0"
   }
 }
