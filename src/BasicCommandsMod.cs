@@ -11,8 +11,14 @@ namespace BasicCommands;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 [SuppressMessage("ReSharper", "UnusedType.Global")]
 public class BasicCommandsMod : ModSystem {
+    public static string? Id { get; private set; }
+
     //private ICoreClientAPI? capi;
     private ICoreServerAPI? sapi;
+
+    public override void Start(ICoreAPI api) {
+        Id = Mod.Info.ModID;
+    }
 
     public override void StartClientSide(ICoreClientAPI api) {
         //capi = api;

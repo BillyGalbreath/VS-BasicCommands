@@ -23,7 +23,7 @@ public abstract class AbstractCommand {
             .Create(cmd.Name)
             .WithDescription(Lang.Get($"{cmd.Name}-description"))
             .RequiresPlayer()
-            .RequiresPrivilege($"basiccommands.{cmd.Name}")
+            .RequiresPrivilege($"{BasicCommandsMod.Id}.{cmd.Name}")
             .HandleWith(args => {
                 BasicPlayer? sender = BasicPlayer.Get(args.Caller.Player);
                 return sender == null ? TextCommandResult.Error(Lang.Get("player-only-command")) : Execute(sender, args);

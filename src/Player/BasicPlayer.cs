@@ -16,8 +16,6 @@ namespace BasicCommands.Player;
 public class BasicPlayer {
     private static readonly ConcurrentDictionary<string, BasicPlayer> PLAYERS = new();
 
-    private const string DataKey = "BasicCommands";
-
     public static IEnumerable<BasicPlayer> GetAll() {
         return PLAYERS.Values;
     }
@@ -53,7 +51,7 @@ public class BasicPlayer {
     private BasicPlayer(IServerPlayer player) {
         Player = player;
 
-        byte[] raw = Player.WorldData.GetModdata(DataKey);
+        byte[] raw = Player.WorldData.GetModdata(BasicCommandsMod.Id);
         if (raw != null) {
             try {
                 data = SerializerUtil.Deserialize<Data>(raw);
@@ -155,7 +153,7 @@ public class BasicPlayer {
         }
 
         dirty = false;
-        Player.WorldData.SetModdata(DataKey, SerializerUtil.Serialize(data));
+        Player.WorldData.SetModdata(BasicCommandsMod.Id, SerializerUtil.Serialize(data));
 
         return this;
     }
