@@ -31,8 +31,8 @@ public class BasicPlayer {
     public static BasicPlayer Remove(IServerPlayer serverPlayer) {
         BasicPlayer player = Get(serverPlayer);
 
-        TpRequest.GetPendingForSender(player)?.Message("cancelled").Remove();
-        TpRequest.GetPendingForTarget(player)?.Message("expired").Remove();
+        TpRequest.GetPendingForSender(player)?.Message("cancelled", true).Remove();
+        TpRequest.GetPendingForTarget(player)?.Message("expired", true).Remove();
 
         player.Save().Remove();
 
@@ -71,6 +71,8 @@ public class BasicPlayer {
     public string Name => Player.PlayerName;
 
     public string Uid => Player.PlayerUID;
+    
+    public Dictionary<string, long> Cooldowns { get; } = new();
 
     public EntityPos EntityPos => Player.Entity.Pos;
 
@@ -106,6 +108,10 @@ public class BasicPlayer {
             data.allowTeleportRequests = value;
             dirty |= changed;
         }
+    }
+
+    public bool Exempt(string command) {
+        return Player.HasPrivilege($"{BasicCommandsMod.Id}.{command}.exempt.cooldown");
     }
 
     public IEnumerable<string> ListHomes() {

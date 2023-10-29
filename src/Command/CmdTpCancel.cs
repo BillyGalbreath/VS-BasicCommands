@@ -12,10 +12,10 @@ public class CmdTpCancel : AbstractCommand {
     protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         TpRequest? request = TpRequest.GetPendingForSender(sender);
         if (request == null) {
-            return TextCommandResult.Success(Lang.Get("teleport-request-nothing-pending"));
+            return TextCommandResult.Error("teleport-request-nothing-pending");
         }
 
-        request.Message("cancelled").Remove();
+        request.Message("cancelled", true).Remove();
 
         return TextCommandResult.Success();
     }

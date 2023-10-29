@@ -38,14 +38,21 @@ public abstract class TpRequest {
         this.target = target;
 
         task = sender.Player.Entity.World.Api.Event.RegisterCallback(_ => {
-            Message("expired");
+            Message("expired", true);
             Remove();
         }, 30000);
     }
 
-    public TpRequest Message(string type) {
-        sender.SendMessage(Lang.Get($"teleport-request-{type}-sender", target.Name));
-        target.SendMessage(Lang.Get($"teleport-request-{type}-target", sender.Name));
+    public TpRequest Message(string type, bool error) {
+        if (error) {
+            sender.SendMessage(Lang.Error($"teleport-request-{type}-sender", target.Name));
+            target.SendMessage(Lang.Error($"teleport-request-{type}-target", sender.Name));
+        }
+        else {
+            sender.SendMessage(Lang.Success($"teleport-request-{type}-sender", target.Name));
+            target.SendMessage(Lang.Success($"teleport-request-{type}-target", sender.Name));
+        }
+
         return this;
     }
 
@@ -59,7 +66,7 @@ public abstract class TpRequest {
             Teleport();
         }
         else {
-            sender.SendMessage(Lang.Get("teleport-request-target-offline", target.Name));
+            sender.SendMessage(Lang.Error("teleport-request-target-offline", target.Name));
         }
 
         Remove();

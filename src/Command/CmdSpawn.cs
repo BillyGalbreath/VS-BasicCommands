@@ -11,6 +11,6 @@ public class CmdSpawn : AbstractCommand {
     protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         sender.TeleportTo(api.World.DefaultSpawnPosition.XYZ);
 
-        return TextCommandResult.Success(Lang.Get("spawn-success"));
+        return TextCommandResult.Success("spawn-success");
     }
 }

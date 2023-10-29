@@ -31,5 +31,6 @@ public class Config {
         public bool Enabled = true;
         public required string Name;
         public string[]? Aliases;
+        public int Cooldown = 0;
     }
 }

@@ -15,7 +15,7 @@ public class CmdTpr : AbstractCommand {
 
     protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         if (PENDING.Contains(sender.Uid)) {
-            return TextCommandResult.Success(Lang.Get("tpr-already-waiting"));
+            return TextCommandResult.Error("tpr-already-waiting");
         }
 
         Random rand = Random.Shared;
@@ -34,10 +34,10 @@ public class CmdTpr : AbstractCommand {
 
                 int topY = (api.WorldManager.GetSurfacePosY(randX, randZ) ?? 0) + 1;
                 sender.TeleportTo(new Vec3d(randX, topY, randZ));
-                sender.SendMessage(Lang.Get("tpr-success", randX, topY, randZ));
+                sender.SendMessage(Lang.Success("tpr-success", randX, topY, randZ));
             }
         });
 
-        return TextCommandResult.Success(Lang.Get("tpr-wait"));
+        return TextCommandResult.Success("tpr-wait");
     }
 }

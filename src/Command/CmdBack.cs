@@ -10,11 +10,11 @@ public class CmdBack : AbstractCommand {
 
     protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         if (sender.LastPos == null) {
-            return TextCommandResult.Success(Lang.Get("back-empty"));
+            return TextCommandResult.Error("back-empty");
         }
 
         sender.TeleportTo(sender.LastPos);
 
-        return TextCommandResult.Success(Lang.Get("back-success"));
+        return TextCommandResult.Success("back-success");
     }
 }

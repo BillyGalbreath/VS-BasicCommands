@@ -13,9 +13,9 @@ public class CmdTpToggle : AbstractCommand {
         sender.AllowTeleportRequests = args.Parsers[0].IsMissing ? !sender.AllowTeleportRequests : (bool)args[0];
 
         if (!sender.AllowTeleportRequests) {
-            TpRequest.GetPendingForTarget(sender)?.Message("denied").Remove();
+            TpRequest.GetPendingForTarget(sender)?.Message("denied", true).Remove();
         }
 
-        return TextCommandResult.Success(Lang.Get("tptoggle-success", sender.AllowTeleportRequests ? Lang.Get("on") : Lang.Get("off")));
+        return TextCommandResult.Success("tptoggle-success", sender.AllowTeleportRequests ? Lang.Get("on") : Lang.Get("off"));
     }
 }

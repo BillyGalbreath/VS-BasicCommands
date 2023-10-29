@@ -13,6 +13,6 @@ public class CmdSetSpawn : AbstractCommand {
         BlockPos pos = sender.EntityPos.AsBlockPos;
         api.WorldManager.SetDefaultSpawnPosition(pos.X, pos.Y, pos.Z);
 
-        return TextCommandResult.Success(Lang.Get("setspawn-success"));
+        return TextCommandResult.Success("setspawn-success");
     }
 }

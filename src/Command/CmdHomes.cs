@@ -14,9 +14,9 @@ public class CmdHomes : AbstractCommand {
 
         // ReSharper disable once ConvertIfStatementToReturnStatement
         if (homes.Length == 0) {
-            return TextCommandResult.Success(Lang.Get("no-homes-set"));
+            return TextCommandResult.Error("no-homes-set");
         }
 
-        return TextCommandResult.Success(Lang.Get("homes-success", string.Join(", ", homes)));
+        return TextCommandResult.Success("homes-success", string.Join(", ", homes));
     }
 }

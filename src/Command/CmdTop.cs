@@ -15,11 +15,11 @@ public class CmdTop : AbstractCommand {
         pos.Y = api.WorldManager.GetSurfacePosY(pos.XInt, pos.ZInt) ?? -1;
 
         if (pos.Y < 0) {
-            return TextCommandResult.Error(Lang.Get("top-failed"));
+            return TextCommandResult.Error("top-failed");
         }
 
         sender.TeleportTo(pos);
 
-        return TextCommandResult.Success(Lang.Get("top-success"));
+        return TextCommandResult.Success("top-success");
     }
 }

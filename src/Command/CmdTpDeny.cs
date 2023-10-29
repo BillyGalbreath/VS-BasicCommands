@@ -12,10 +12,10 @@ public class CmdTpDeny : AbstractCommand {
     protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         TpRequest? request = TpRequest.GetPendingForTarget(sender);
         if (request == null) {
-            return TextCommandResult.Success(Lang.Get("teleport-request-nothing-pending"));
+            return TextCommandResult.Error("teleport-request-nothing-pending");
         }
 
-        request.Message("denied").Remove();
+        request.Message("denied", true).Remove();
 
         return TextCommandResult.Success();
     }
