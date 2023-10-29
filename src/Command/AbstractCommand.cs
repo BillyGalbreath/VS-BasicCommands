@@ -23,7 +23,10 @@ public abstract class AbstractCommand {
             return;
         }
 
-        ((ServerMain)api.World).PlayerDataManager.RegisterPrivilege($"{BasicCommandsMod.Id}.{cmdConfig.Name}", cmdConfig.Name);
+        string basePerm = $"{BasicCommandsMod.Id}.{cmdConfig.Name}";
+        PlayerDataManager pdm = ((ServerMain)api.World).PlayerDataManager;
+        pdm.RegisterPrivilege(basePerm, cmdConfig.Name);
+        pdm.RegisterPrivilege($"{basePerm}.exempt.cooldown", cmdConfig.Name);
 
         IChatCommand chatCmd = api.ChatCommands
             .Create(cmdConfig.Name)
