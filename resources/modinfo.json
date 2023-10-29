@@ -6,6 +6,7 @@
   "description": "Basic commands for Vintage Story servers",
   "website": "https://github.com/BillyGalbreath/VS-BasicCommands",
   "authors": [ "BillyGalbreath" ],
+  "side": "Server",
   "dependencies": {
     "game": "1.18.8"
   }

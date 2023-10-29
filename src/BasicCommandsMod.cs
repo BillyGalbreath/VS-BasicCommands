@@ -3,7 +3,6 @@ using BasicCommands.Command;
 using BasicCommands.Configuration;
 using BasicCommands.Patches;
 using BasicCommands.Player;
-using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
 
@@ -14,16 +13,11 @@ namespace BasicCommands;
 public class BasicCommandsMod : ModSystem {
     public static string? Id { get; private set; }
 
-    //private ICoreClientAPI? capi;
     private ICoreServerAPI? sapi;
     private HarmonyPatches? patches;
 
     public override void Start(ICoreAPI api) {
         Id = Mod.Info.ModID;
-    }
-
-    public override void StartClientSide(ICoreClientAPI api) {
-        //capi = api;
     }
 
     public override void StartServerSide(ICoreServerAPI api) {
