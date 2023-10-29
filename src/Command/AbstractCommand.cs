@@ -2,6 +2,7 @@
 using BasicCommands.Player;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
+using Vintagestory.Server;
 
 namespace BasicCommands.Command;
 
@@ -18,6 +19,8 @@ public abstract class AbstractCommand {
         if (!cmd.Enabled) {
             return;
         }
+
+        ((ServerMain)api.World).PlayerDataManager.RegisterPrivilege($"{BasicCommandsMod.Id}.{cmd.Name}", cmd.Name);
 
         IChatCommand chatCmd = api.ChatCommands
             .Create(cmd.Name)
