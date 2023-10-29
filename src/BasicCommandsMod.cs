@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using BasicCommands.Command;
 using BasicCommands.Configuration;
+using BasicCommands.Patches;
 using BasicCommands.Player;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -15,6 +16,7 @@ public class BasicCommandsMod : ModSystem {
 
     //private ICoreClientAPI? capi;
     private ICoreServerAPI? sapi;
+    private HarmonyPatches? patches;
 
     public override void Start(ICoreAPI api) {
         Id = Mod.Info.ModID;
@@ -27,11 +29,12 @@ public class BasicCommandsMod : ModSystem {
     public override void StartServerSide(ICoreServerAPI api) {
         sapi = api;
 
+        patches = new HarmonyPatches(this);
+
         sapi.Event.GameWorldSave += OnGameWorldSave;
         sapi.Event.PlayerCreate += OnPlayerCreate;
         sapi.Event.PlayerJoin += OnPlayerJoin;
         sapi.Event.PlayerDisconnect += OnPlayerDisconnect;
-        sapi.Event.PlayerDeath += OnPlayerDeath;
 
         Config config = api.LoadModConfig<Config>($"{Mod.Info.ModID}.json");
         if (config == null) {
@@ -72,10 +75,6 @@ public class BasicCommandsMod : ModSystem {
         BasicPlayer.Remove(player).IsOnline = false;
     }
 
-    private static void OnPlayerDeath(IServerPlayer player, DamageSource damageSource) {
-        BasicPlayer.Get(player).UpdateLastPosition();
-    }
-
     public override void Dispose() {
         if (sapi == null) {
             return;
@@ -85,6 +84,8 @@ public class BasicCommandsMod : ModSystem {
         sapi.Event.PlayerCreate -= OnPlayerCreate;
         sapi.Event.PlayerJoin -= OnPlayerJoin;
         sapi.Event.PlayerDisconnect -= OnPlayerDisconnect;
-        sapi.Event.PlayerDeath -= OnPlayerDeath;
+
+        patches?.Dispose();
+        patches = null;
     }
 }

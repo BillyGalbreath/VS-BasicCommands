@@ -74,7 +74,7 @@ public class BasicPlayer {
     
     public Dictionary<string, long> Cooldowns { get; } = new();
 
-    public EntityPos EntityPos => Player.Entity.Pos;
+    public EntityPos EntityPos => Player.Entity.ServerPos;
 
     public Vec3d? LastPos {
         get => data.lastPos;
@@ -145,7 +145,6 @@ public class BasicPlayer {
             throw new ArgumentNullException(nameof(pos), "Cannot teleport to null!");
         }
 
-        UpdateLastPosition();
         Player.Entity.TeleportTo(new Vec3d((int)pos.X + 0.5F, Math.Round(pos.Y, MidpointRounding.ToPositiveInfinity), (int)pos.Z + 0.5F));
     }
 
