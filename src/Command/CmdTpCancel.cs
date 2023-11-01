@@ -9,14 +9,14 @@ namespace BasicCommands.Command;
 public class CmdTpCancel : AbstractCommand {
     public CmdTpCancel(ICoreServerAPI api, Config config) : base(api, config) { }
 
-    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         TpRequest? request = TpRequest.GetPendingForSender(sender);
         if (request == null) {
-            return TextCommandResult.Error("teleport-request-nothing-pending");
+            return Error("teleport-request-nothing-pending");
         }
 
         request.Message("cancelled", true).Remove();
 
-        return TextCommandResult.Success();
+        return Success();
     }
 }

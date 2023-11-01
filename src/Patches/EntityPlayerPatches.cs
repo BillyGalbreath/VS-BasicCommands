@@ -3,6 +3,7 @@ using System.Reflection;
 using BasicCommands.Player;
 using HarmonyLib;
 using Vintagestory.API.Common;
+using Vintagestory.API.Server;
 
 namespace BasicCommands.Patches;
 
@@ -20,7 +21,9 @@ public class EntityPlayerPatches {
         [SuppressMessage("ReSharper", "InconsistentNaming")]
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         public static void Prefix(EntityPlayer __instance) {
-            BasicPlayer.Get(__instance.Player)?.UpdateLastPosition();
+            if (__instance.Player is IServerPlayer player) {
+                BasicPlayer.Get(player).UpdateLastPosition();
+            }
         }
     }
 }

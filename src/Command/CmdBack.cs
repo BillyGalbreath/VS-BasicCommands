@@ -8,13 +8,13 @@ namespace BasicCommands.Command;
 public class CmdBack : AbstractCommand {
     public CmdBack(ICoreServerAPI api, Config config) : base(api, config) { }
 
-    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         if (sender.LastPos == null) {
-            return TextCommandResult.Error("back-empty");
+            return Error("back-empty");
         }
 
         sender.TeleportTo(sender.LastPos);
 
-        return TextCommandResult.Success("back-success");
+        return Success("back-success");
     }
 }

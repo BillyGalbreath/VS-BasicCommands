@@ -15,24 +15,20 @@ public class BasicPlayerArgParser : ArgumentParserBase {
         return BasicPlayer.GetAll().Select(basicPlayer => basicPlayer.Name).ToArray();
     }
 
-    public override BasicPlayer? GetValue() {
-        return player;
-    }
+    public override BasicPlayer? GetValue() => !isMandatoryArg && IsMissing ? null : player;
 
-    public override void SetValue(object data) {
-        player = (BasicPlayer)data;
-    }
+    public override void SetValue(object data) => player = (BasicPlayer)data;
 
     public override EnumParseResult TryProcess(TextCommandCallingArgs args, Action<AsyncParseResults>? onReady = null) {
         string? arg = args.RawArgs.PopWord()?.ToLower();
         if (arg == null) {
-            lastErrorMessage = Lang.Error("Argument is missing");
+            lastErrorMessage = Lang.Error("must-specify-player");
             return EnumParseResult.Bad;
         }
 
         var online = BasicPlayer.GetAll().Where(basicPlayer => basicPlayer.Name.ToLower().StartsWith(arg)).ToArray();
         if (online.Length > 1) {
-            lastErrorMessage = Lang.Error("More than one player matches that name");
+            lastErrorMessage = Lang.Error("too-many-players");
             return EnumParseResult.Bad;
         }
 
@@ -40,7 +36,7 @@ public class BasicPlayerArgParser : ArgumentParserBase {
             return EnumParseResult.Good;
         }
 
-        lastErrorMessage = Lang.Error("No such player online");
+        lastErrorMessage = Lang.Error("player-not-found");
         return EnumParseResult.Bad;
     }
 }

@@ -9,10 +9,10 @@ namespace BasicCommands.Command;
 public class CmdSetSpawn : AbstractCommand {
     public CmdSetSpawn(ICoreServerAPI api, Config config) : base(api, config) { }
 
-    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         BlockPos pos = sender.EntityPos.AsBlockPos;
         api.WorldManager.SetDefaultSpawnPosition(pos.X, pos.Y, pos.Z);
 
-        return TextCommandResult.Success("setspawn-success");
+        return Success("setspawn-success");
     }
 }

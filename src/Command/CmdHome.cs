@@ -14,23 +14,23 @@ public class CmdHome : AbstractCommand {
 
     public CmdHome(ICoreServerAPI api, Config config) : base(api, config, new WordArgParser("name", true)) { }
 
-    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         if (args.Parsers[0].IsMissing) {
-            return TextCommandResult.Error("must-specify-home");
+            return Error("must-specify-home");
         }
 
         string name = args[0].ToString()!.Trim().ToLower();
         if (!VALID_NAME.IsMatch(name)) {
-            return TextCommandResult.Error("invalid-home-name");
+            return Error("invalid-home-name");
         }
 
         Vec3d? pos = sender.GetHome(name);
         if (pos == null) {
-            return TextCommandResult.Error("home-doesnt-exist", name);
+            return Error("home-doesnt-exist", name);
         }
 
         sender.TeleportTo(pos);
 
-        return TextCommandResult.Success("home-success", name);
+        return Success("home-success", name);
     }
 }

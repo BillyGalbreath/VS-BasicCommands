@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using BasicCommands.Configuration;
 using BasicCommands.Extensions;
 using BasicCommands.Player;
@@ -11,6 +12,9 @@ namespace BasicCommands.Command;
 
 public abstract class AbstractCommand {
     protected readonly ICoreServerAPI api;
+    private readonly string? name;
+
+    protected string CmdName => name ?? "";
 
     protected AbstractCommand(ICoreServerAPI api, Config config, params ICommandArgumentParser[]? parsers) {
         this.api = api;
@@ -23,16 +27,18 @@ public abstract class AbstractCommand {
             return;
         }
 
-        string basePerm = $"{BasicCommandsMod.Id}.{cmdConfig.Name}";
+        name = cmdConfig.Name;
+
+        string basePerm = $"{BasicCommandsMod.Id}.{name}";
         PlayerDataManager pdm = ((ServerMain)api.World).PlayerDataManager;
-        pdm.RegisterPrivilege(basePerm, cmdConfig.Name);
-        pdm.RegisterPrivilege($"{basePerm}.exempt.cooldown", cmdConfig.Name);
+        pdm.RegisterPrivilege(basePerm, name);
+        pdm.RegisterPrivilege($"{basePerm}.exempt.cooldown", name);
 
         IChatCommand chatCmd = api.ChatCommands
-            .Create(cmdConfig.Name)
-            .WithDescription(Lang.Get($"{cmdConfig.Name}-description"))
+            .Create(name)
+            .WithDescription(Lang.Get($"{name}-description"))
             .RequiresPlayer()
-            .RequiresPrivilege($"{BasicCommandsMod.Id}.{cmdConfig.Name}")
+            .RequiresPrivilege($"{BasicCommandsMod.Id}.{name}")
             .HandleWith(args => HandleCommand(cmdConfig, args));
 
         if (cmdConfig.Aliases is { Length: > 0 }) {
@@ -45,36 +51,58 @@ public abstract class AbstractCommand {
     }
 
     private TextCommandResult HandleCommand(Config.Command cmdConfig, TextCommandCallingArgs args) {
-        BasicPlayer? sender = BasicPlayer.Get(args.Caller.Player);
+        BasicPlayer? sender = args.Caller.Player is IServerPlayer player ? BasicPlayer.Get(player) : null;
         if (sender == null) {
             return TextCommandResult.Success(Lang.Error("player-only-command"));
         }
 
-        if (cmdConfig.Cooldown <= 0 || sender.Exempt(cmdConfig.Name)) {
-            return Execute(sender, args);
-        }
-
-        long cooldown = sender.Cooldowns.GetValueOrDefault(cmdConfig.Name);
-        long now = DateTimeOffset.Now.ToUnixTimeSeconds();
-
-        if (cooldown > now) {
-            return TextCommandResult.Success(Lang.Error("command-on-cooldown", TimeSpan.FromSeconds(cooldown - now).Remaining()));
-        }
-
-        TextCommandResult result = Execute(sender, args);
-        if (result.Status == EnumCommandStatus.Error) {
-            result.Status = EnumCommandStatus.Success;
-            result.StatusMessage = Lang.Error(result.StatusMessage);
+        CommandResult result;
+        if (cmdConfig.Cooldown <= 0 || sender.Exempt(name)) {
+            result = Execute(sender, args);
         }
         else {
-            sender.Cooldowns[cmdConfig.Name] = now + cmdConfig.Cooldown;
-            if (result.StatusMessage.Length > 0) {
-                result.StatusMessage = Lang.Success(result.StatusMessage);
+            long cooldown = sender.Cooldowns.GetValueOrDefault(name);
+            long now = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+            result = cooldown > now ? Error("command-on-cooldown", TimeSpan.FromSeconds(cooldown - now).Remaining()) : Execute(sender, args);
+
+            if (result.Status == EnumCommandStatus.Success) {
+                sender.Cooldowns[name] = now + cmdConfig.Cooldown;
             }
         }
 
-        return result;
+        string message;
+        if (result.Status == EnumCommandStatus.Error) {
+            message = Lang.Error(result.Message, result.Args);
+        }
+        else if (result.Message.Length > 0) {
+            message = Lang.Success(result.Message, result.Args);
+        }
+        else {
+            message = "";
+        }
+
+        return TextCommandResult.Success(message);
     }
 
-    protected abstract TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args);
+    protected abstract CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args);
+
+    protected static CommandResult Success(string message = "", params object[]? args) => new() {
+        Status = EnumCommandStatus.Success,
+        Message = message,
+        Args = args
+    };
+
+    protected static CommandResult Error(string message, params object[]? args) => new() {
+        Status = EnumCommandStatus.Error,
+        Message = message,
+        Args = args
+    };
+}
+
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+public class CommandResult {
+    public required EnumCommandStatus Status;
+    public required string Message;
+    public object[]? Args;
 }

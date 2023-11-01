@@ -9,14 +9,14 @@ namespace BasicCommands.Command;
 public class CmdTpAccept : AbstractCommand {
     public CmdTpAccept(ICoreServerAPI api, Config config) : base(api, config) { }
 
-    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         TpRequest? request = TpRequest.GetPendingForTarget(sender);
         if (request == null) {
-            return TextCommandResult.Error("teleport-request-nothing-pending");
+            return Error("teleport-request-nothing-pending");
         }
 
         request.Message("accepted", false).Accept();
 
-        return TextCommandResult.Success();
+        return Success();
     }
 }

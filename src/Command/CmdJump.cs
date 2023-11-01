@@ -8,15 +8,15 @@ namespace BasicCommands.Command;
 public class CmdJump : AbstractCommand {
     public CmdJump(ICoreServerAPI api, Config config) : base(api, config) { }
 
-    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         BlockSelection? target = sender.TargetBlock;
 
         if (target == null || target.Position == null) {
-            return TextCommandResult.Error("jump-failed");
+            return Error("jump-failed");
         }
 
         sender.TeleportTo(target.Position.ToVec3d().Add(0.5, 0, 0.5));
 
-        return TextCommandResult.Success("jump-success");
+        return Success("jump-success");
     }
 }

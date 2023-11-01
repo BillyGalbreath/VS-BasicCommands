@@ -9,14 +9,14 @@ namespace BasicCommands.Command;
 public class CmdTpDeny : AbstractCommand {
     public CmdTpDeny(ICoreServerAPI api, Config config) : base(api, config) { }
 
-    protected override TextCommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
+    protected override CommandResult Execute(BasicPlayer sender, TextCommandCallingArgs args) {
         TpRequest? request = TpRequest.GetPendingForTarget(sender);
         if (request == null) {
-            return TextCommandResult.Error("teleport-request-nothing-pending");
+            return Error("teleport-request-nothing-pending");
         }
 
         request.Message("denied", true).Remove();
 
-        return TextCommandResult.Success();
+        return Success();
     }
 }
